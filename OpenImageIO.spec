@@ -1,6 +1,4 @@
-# TODO:
-# - Field3D (in progress)
-# and if possible:
+# TODO if possible:
 # - system libcineon in cineon plugin
 # - system libsquish in dds plugin
 # - system libdpx in dpx plugin
@@ -21,7 +19,9 @@ Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}#/%{name}
 # Source0-md5:	20c0867864ee6b1cfccc45a0460c12bc
 Patch0:		%{name}-soname.patch
 Patch1:		%{name}-python.patch
+Patch2:		%{name}-hdf.patch
 URL:		https://sites.google.com/site/openimageio/home
+BuildRequires:	Field3D-devel
 BuildRequires:	OpenEXR-devel >= 1.6.1
 BuildRequires:	OpenGL-devel
 BuildRequires:	QtCore-devel
@@ -32,8 +32,7 @@ BuildRequires:	boost-devel >= 1.35
 BuildRequires:	boost-python-devel >= 1.35
 BuildRequires:	cmake >= 2.6
 BuildRequires:	glew-devel >= 1.5.1
-# for FIELD3D (Field3D/Field.h, -lField3D)
-#BuildRequires:	hdf5-devel
+BuildRequires:	hdf5-devel
 BuildRequires:	ilmbase-devel >= 1.0.1
 BuildRequires:	jasper-devel
 BuildRequires:	libjpeg-devel
@@ -78,6 +77,18 @@ Header files for OpenImageIO library.
 
 %description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki OpenImageIO.
+
+%package plugin-field3d
+Summary:	Field3D plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka Field3D dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-field3d
+OpenImageIO plugin to read and write Field3D files.
+
+%description plugin-field3d -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki Field3D.
 
 %package plugin-ico
 Summary:	ICO plugin for OpenImageIO library
@@ -197,6 +208,7 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %setup -q -n OpenImageIO-oiio-7d98ca6
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 install -d build
@@ -208,7 +220,6 @@ cd build
 	-DPYTHON_VERSION=%{py_ver} \
 	-DSOVERSION:STRING=0 \
 	%{!?with_tbb:-DUSE_TBB=OFF} \
-# FIELD3D ?
 
 %{__make}
 
@@ -258,6 +269,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so
 %{_includedir}/OpenImageIO
+
+%files plugin-field3d
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/field3d.imageio.so
 
 %files plugin-ico
 %defattr(644,root,root,755)

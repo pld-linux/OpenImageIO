@@ -1,0 +1,12 @@
+Field3D uses only C interface of hdf5
+--- OpenImageIO-oiio-7d98ca6/src/cmake/externalpackages.cmake.orig	2011-11-05 08:35:00.000000000 +0100
++++ OpenImageIO-oiio-7d98ca6/src/cmake/externalpackages.cmake	2011-11-18 20:57:50.883126299 +0100
+@@ -195,7 +195,7 @@
+         # variables HDF5_INCLUDE_DIRS and HDF5_LIBRARIES.
+     else ()
+         message (STATUS "Looking for system HDF5")
+-        find_package (HDF5 COMPONENTS CXX)
++        find_package (HDF5)
+     endif ()
+     message (STATUS "HDF5_FOUND=${HDF5_FOUND}")
+     message (STATUS "HDF5_INCLUDE_DIRS=${HDF5_INCLUDE_DIRS}")
