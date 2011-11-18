@@ -1,0 +1,22 @@
+--- OpenImageIO-oiio-7d98ca6/src/libOpenImageIO/CMakeLists.txt.orig	2011-11-05 08:35:00.000000000 +0100
++++ OpenImageIO-oiio-7d98ca6/src/libOpenImageIO/CMakeLists.txt	2011-11-17 19:32:41.350062223 +0100
+@@ -173,16 +173,15 @@
+                                ${HDF5_LIBRARIES}
+                           )
+     link_openexr (OpenImageIO)
++else ()
++    target_link_libraries (OpenImageIO dl)
+ endif ()
+ 
+-if (SOVERSION)
+-message(STATUS "Setting SOVERSION to: ${SOVERSION}")
+ set_target_properties(OpenImageIO
+                          PROPERTIES
+                          VERSION ${OIIO_VERSION_MAJOR}.${OIIO_VERSION_MINOR}.${OIIO_VERSION_PATCH}
+-                         SOVERSION ${SOVERSION}
++			 SOVERSION ${OIIO_VERSION_MAJOR}
+                      )
+-endif ()
+ 
+ oiio_install_targets (OpenImageIO)
+ 
