@@ -1,7 +1,6 @@
 # TODO if possible:
 # - system libcineon in cineon plugin
 # - system libdpx in dpx plugin
-# - system ptex library in ptex plugin
 #
 # Conditional build:
 %bcond_without	static_libs	# don't build static libraries
@@ -20,6 +19,7 @@ Patch0:		%{name}-soname.patch
 Patch1:		%{name}-python.patch
 Patch2:		%{name}-hdf.patch
 Patch3:		%{name}-system-squish.patch
+Patch4:		%{name}-system-ptex.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
 BuildRequires:	OpenEXR-devel >= 1.6.1
@@ -38,6 +38,7 @@ BuildRequires:	jasper-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
+BuildRequires:	ptex-devel >= 2
 BuildRequires:	python-devel >= 1:2.6
 BuildRequires:	squish-devel >= 1.10
 %{?with_tbb:BuildRequires:	tbb-devel}
@@ -87,10 +88,10 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	squish >= 1.10
 
 %description plugin-dds
-OpenImageIO plugin to read and write DDS files.
+OpenImageIO plugin to read DDS files.
 
 %description plugin-dds -l pl.UTF-8
-Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki DDS.
+Wtyczka biblioteki OpenImageIO czytająca pliki DDS.
 
 %package plugin-field3d
 Summary:	Field3D plugin for OpenImageIO library
@@ -99,10 +100,10 @@ Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description plugin-field3d
-OpenImageIO plugin to read and write Field3D files.
+OpenImageIO plugin to read Field3D files.
 
 %description plugin-field3d -l pl.UTF-8
-Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki Field3D.
+Wtyczka biblioteki OpenImageIO czytająca pliki Field3D.
 
 %package plugin-ico
 Summary:	ICO plugin for OpenImageIO library
@@ -167,6 +168,19 @@ OpenImageIO plugin to read and write PNG files.
 %description plugin-png -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki PNG.
 
+%package plugin-ptex
+Summary:	Ptex plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka Ptex dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+Requires:	ptex >= 2
+
+%description plugin-ptex
+OpenImageIO plugin to read Ptex files.
+
+%description plugin-ptex -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca pliki Ptex.
+
 %package plugin-tiff
 Summary:	TIFF plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka TIFF dla biblioteki OpenImageIO
@@ -224,8 +238,9 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
-%{__rm} -r src/dds.imageio/squish
+%{__rm} -r src/dds.imageio/squish src/ptex.imageio/ptex
 
 %build
 install -d build
@@ -235,7 +250,6 @@ cd build
 	-DLIBDIR=%{_libdir} \
 	-DPYLIBDIR=%{py_sitedir} \
 	-DPYTHON_VERSION=%{py_ver} \
-	-DSOVERSION:STRING=0 \
 	%{!?with_tbb:-DUSE_TBB=OFF} \
 
 %{__make}
@@ -274,7 +288,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
 %attr(755,root,root) %{_libdir}/pnm.imageio.so
-%attr(755,root,root) %{_libdir}/ptex.imageio.so
 %attr(755,root,root) %{_libdir}/sgi.imageio.so
 %attr(755,root,root) %{_libdir}/socket.imageio.so
 %attr(755,root,root) %{_libdir}/softimage.imageio.so
@@ -313,6 +326,10 @@ rm -rf $RPM_BUILD_ROOT
 %files plugin-png
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/png.imageio.so
+
+%files plugin-ptex
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/ptex.imageio.so
 
 %files plugin-tiff
 %defattr(644,root,root,755)
