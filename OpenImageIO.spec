@@ -1,6 +1,5 @@
 # TODO if possible:
 # - system libcineon in cineon plugin
-# - system libsquish in dds plugin
 # - system libdpx in dpx plugin
 # - system ptex library in ptex plugin
 #
@@ -20,6 +19,7 @@ Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}#/%{name}
 Patch0:		%{name}-soname.patch
 Patch1:		%{name}-python.patch
 Patch2:		%{name}-hdf.patch
+Patch3:		%{name}-system-squish.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
 BuildRequires:	OpenEXR-devel >= 1.6.1
@@ -39,6 +39,7 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	python-devel >= 1:2.6
+BuildRequires:	squish-devel >= 1.10
 %{?with_tbb:BuildRequires:	tbb-devel}
 BuildRequires:	zlib-devel
 Requires:	ilmbase >= 1.0.1
@@ -77,6 +78,19 @@ Header files for OpenImageIO library.
 
 %description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki OpenImageIO.
+
+%package plugin-dds
+Summary:	DDS plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka DDS dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+Requires:	squish >= 1.10
+
+%description plugin-dds
+OpenImageIO plugin to read and write DDS files.
+
+%description plugin-dds -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki DDS.
 
 %package plugin-field3d
 Summary:	Field3D plugin for OpenImageIO library
@@ -209,6 +223,9 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+
+%{__rm} -r src/dds.imageio/squish
 
 %build
 install -d build
@@ -253,7 +270,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.0
 %attr(755,root,root) %{_libdir}/bmp.imageio.so
-%attr(755,root,root) %{_libdir}/dds.imageio.so
 %attr(755,root,root) %{_libdir}/dpx.imageio.so
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
@@ -269,6 +285,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so
 %{_includedir}/OpenImageIO
+
+%files plugin-dds
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/dds.imageio.so
 
 %files plugin-field3d
 %defattr(644,root,root,755)
