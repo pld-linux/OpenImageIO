@@ -1,6 +1,4 @@
-# TODO if possible:
-# - system libcineon in cineon plugin
-# - system libdpx in dpx plugin
+# NOTE: cineon plugin is not built (code not updated)
 #
 # Conditional build:
 %bcond_without	static_libs	# don't build static libraries
@@ -20,6 +18,8 @@ Patch1:		%{name}-python.patch
 Patch2:		%{name}-hdf.patch
 Patch3:		%{name}-system-squish.patch
 Patch4:		%{name}-system-ptex.patch
+Patch5:		%{name}-system-dpx.patch
+Patch6:		%{name}-system-libcineon.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
 BuildRequires:	OpenEXR-devel >= 1.6.1
@@ -31,6 +31,7 @@ BuildRequires:	QtOpenGL-devel
 BuildRequires:	boost-devel >= 1.35
 BuildRequires:	boost-python-devel >= 1.35
 BuildRequires:	cmake >= 2.6
+BuildRequires:	dpx-devel
 BuildRequires:	glew-devel >= 1.5.1
 BuildRequires:	hdf5-devel
 BuildRequires:	ilmbase-devel >= 1.0.1
@@ -92,6 +93,18 @@ OpenImageIO plugin to read DDS files.
 
 %description plugin-dds -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca pliki DDS.
+
+%package plugin-dpx
+Summary:	DPX plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka DPX dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-dpx
+OpenImageIO plugin to read and write DPX files.
+
+%description plugin-dpx -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki DPX.
 
 %package plugin-field3d
 Summary:	Field3D plugin for OpenImageIO library
@@ -239,6 +252,8 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %{__rm} -r src/dds.imageio/squish src/ptex.imageio/ptex
 
@@ -284,7 +299,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.0
 %attr(755,root,root) %{_libdir}/bmp.imageio.so
-%attr(755,root,root) %{_libdir}/dpx.imageio.so
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
 %attr(755,root,root) %{_libdir}/pnm.imageio.so
@@ -302,6 +316,10 @@ rm -rf $RPM_BUILD_ROOT
 %files plugin-dds
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/dds.imageio.so
+
+%files plugin-dpx
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/dpx.imageio.so
 
 %files plugin-field3d
 %defattr(644,root,root,755)
