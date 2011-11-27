@@ -262,7 +262,6 @@ install -d build
 cd build
 %cmake ../src \
 	-DEMBEDPLUGINS=OFF \
-	-DLIBDIR=%{_libdir} \
 	-DPYLIBDIR=%{py_sitedir} \
 	-DPYTHON_VERSION=%{py_ver} \
 	%{!?with_tbb:-DUSE_TBB=OFF} \

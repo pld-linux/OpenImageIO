@@ -1,15 +1,18 @@
 --- OpenImageIO-oiio-7d98ca6/src/CMakeLists.txt.orig	2011-11-05 08:35:00.000000000 +0100
 +++ OpenImageIO-oiio-7d98ca6/src/CMakeLists.txt	2011-11-17 21:14:23.986933229 +0100
-@@ -92,11 +92,11 @@
+@@ -91,12 +91,12 @@
+
  # Exec Install Locations
  set (BINDIR   "${CMAKE_INSTALL_PREFIX}/bin")
- set (LIBDIR   "${CMAKE_INSTALL_PREFIX}/lib")
+-set (LIBDIR   "${CMAKE_INSTALL_PREFIX}/lib")
 -set (PYLIBDIR "${CMAKE_INSTALL_PREFIX}/python")
++set (LIBDIR   "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}")
 +set (PYLIBDIR CACHE STRING "${CMAKE_INSTALL_PREFIX}/python")
  if (EXEC_INSTALL_PREFIX)
      set (BINDIR   "${EXEC_INSTALL_PREFIX}/bin")
-     set (LIBDIR   "${EXEC_INSTALL_PREFIX}/lib")
+-    set (LIBDIR   "${EXEC_INSTALL_PREFIX}/lib")
 -    set (PYLIBDIR "${EXEC_INSTALL_PREFIX}/python")
++    set (LIBDIR   "${EXEC_INSTALL_PREFIX}/lib${LIB_SUFFIX}")
 +    set (PYLIBDIR CACHE STRING "${EXEC_INSTALL_PREFIX}/python")
  endif ()
  
