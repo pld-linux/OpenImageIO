@@ -1,0 +1,10 @@
+--- OpenImageIO-oiio-7d98ca6/src/ico.imageio/icooutput.cpp~	2011-11-05 08:35:00.000000000 +0100
++++ OpenImageIO-oiio-7d98ca6/src/ico.imageio/icooutput.cpp	2012-02-12 14:02:32.104659425 +0100
+@@ -31,6 +31,7 @@
+ #include <cstdio>
+ #include <cstdlib>
+ #include <cmath>
++#include <zlib.h>
+ 
+ #include "ico.h"
+ #include "../png.imageio/png_pvt.h"
