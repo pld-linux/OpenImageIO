@@ -6,7 +6,7 @@ Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
 Version:	1.0.7
-Release:	0.1
+Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}#/%{name}-%{version}.tar.gz
