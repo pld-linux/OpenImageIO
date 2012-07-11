@@ -1,5 +1,3 @@
-# NOTE: cineon plugin is not built (code not updated)
-#
 # Conditional build:
 %bcond_without	static_libs	# don't build static libraries
 %bcond_without	tbb		# Threading Building Blocks
@@ -80,6 +78,18 @@ Header files for OpenImageIO library.
 
 %description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki OpenImageIO.
+
+%package plugin-cineon
+Summary:	Cineon plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka Cineon dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-cineon
+OpenImageIO plugin to read Cineon files.
+
+%description plugin-cineon -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca pliki Cineon.
 
 %package plugin-dds
 Summary:	DDS plugin for OpenImageIO library
@@ -181,6 +191,18 @@ OpenImageIO plugin to read and write PNG files.
 %description plugin-png -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki PNG.
 
+%package plugin-psd
+Summary:	PSD plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka PSD dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-psd
+OpenImageIO plugin to read and write PSD files.
+
+%description plugin-psd -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki PSD.
+
 %package plugin-ptex
 Summary:	Ptex plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka Ptex dla biblioteki OpenImageIO
@@ -261,7 +283,8 @@ install -d build
 cd build
 %cmake ../src \
 	-DEMBEDPLUGINS=OFF \
-	-DPYLIBDIR=%{py_sitedir} \
+	-DPYLIB_INSTALL_DIR=%{py_sitedir} \
+	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
 	-DPYTHON_VERSION=%{py_ver} \
 	%{!?with_tbb:-DUSE_TBB=OFF} \
 
@@ -275,6 +298,9 @@ rm -rf $RPM_BUILD_ROOT
 
 # name clash with iv
 %{__mv} -f $RPM_BUILD_ROOT%{_bindir}/{iv,oiiv}
+
+# installed as %doc
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/doc/openimageio
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -291,12 +317,15 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/iinfo
 %attr(755,root,root) %{_bindir}/iprocess
 %attr(755,root,root) %{_bindir}/maketx
+%attr(755,root,root) %{_bindir}/oiiotool
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.1.0
 %attr(755,root,root) %{_libdir}/bmp.imageio.so
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
+%attr(755,root,root) %{_libdir}/iff.imageio.so
 %attr(755,root,root) %{_libdir}/pnm.imageio.so
+%attr(755,root,root) %{_libdir}/rla.imageio.so
 %attr(755,root,root) %{_libdir}/sgi.imageio.so
 %attr(755,root,root) %{_libdir}/socket.imageio.so
 %attr(755,root,root) %{_libdir}/softimage.imageio.so
@@ -307,6 +336,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so
 %{_includedir}/OpenImageIO
+
+%files plugin-cineon
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/cineon.imageio.so
 
 %files plugin-dds
 %defattr(644,root,root,755)
@@ -339,6 +372,10 @@ rm -rf $RPM_BUILD_ROOT
 %files plugin-png
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/png.imageio.so
+
+%files plugin-psd
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/psd.imageio.so
 
 %files plugin-ptex
 %defattr(644,root,root,755)
