@@ -13,14 +13,11 @@ License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}#/%{name}-%{version}.tar.gz
 # Source0-md5:	5a24c19c38d48b3e90cf94258fc0256b
-Patch0:		%{name}-soname.patch
-Patch1:		%{name}-python.patch
 Patch2:		%{name}-hdf.patch
 Patch3:		%{name}-system-squish.patch
 Patch4:		%{name}-system-ptex.patch
 Patch5:		%{name}-system-dpx.patch
 Patch6:		%{name}-system-libcineon.patch
-Patch7:		%{name}-libpng15.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
 BuildRequires:	OpenEXR-devel >= 1.6.1
@@ -37,6 +34,7 @@ BuildRequires:	glew-devel >= 1.5.1
 BuildRequires:	hdf5-devel
 BuildRequires:	ilmbase-devel >= 1.0.1
 BuildRequires:	jasper-devel
+BuildRequires:	libcineon-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
@@ -248,14 +246,11 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
 %setup -q -n OpenImageIO-oiio-0cae52b
-%patch0 -p1
-%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
 
 %{__rm} -r src/dds.imageio/squish src/ptex.imageio/ptex
 

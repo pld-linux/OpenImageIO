@@ -12,7 +12,7 @@
 -                 ptex/PtexTriangleKernel.cpp
 -                 ptex/PtexUtils.cpp
 -                 ptex/PtexWriter.cpp
--                 )
+-                 LINK_LIBRARIES ${ZLIB_LIBRARIES} )
 +	LINK_LIBRARIES Ptex)
  
 --- OpenImageIO-oiio-7d98ca6/src/ptex.imageio/ptexoutput.cpp.orig	2011-11-05 08:35:00.000000000 +0100
