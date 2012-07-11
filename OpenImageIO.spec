@@ -2,11 +2,16 @@
 %bcond_without	static_libs	# don't build static libraries
 %bcond_without	tbb		# Threading Building Blocks
 #
+
+%ifarch i486
+%undefine	with_tbb
+%endif
+
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
 Version:	1.0.7
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}#/%{name}-%{version}.tar.gz
