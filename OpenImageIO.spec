@@ -2,16 +2,11 @@
 %bcond_without	static_libs	# don't build static libraries
 %bcond_without	tbb		# Threading Building Blocks
 #
-
-%ifarch i486
-%undefine	with_tbb
-%endif
-
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
 Version:	1.0.7
-Release:	2
+Release:	3
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}#/%{name}-%{version}.tar.gz
@@ -22,6 +17,7 @@ Patch3:		%{name}-system-squish.patch
 Patch4:		%{name}-system-ptex.patch
 Patch5:		%{name}-system-dpx.patch
 Patch6:		%{name}-system-libcineon.patch
+Patch7:		no-gcc-atomics.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
 BuildRequires:	OpenEXR-devel >= 1.6.1
@@ -294,6 +290,9 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%ifarch i486
+%patch7 -p1
+%endif
 
 %{__rm} -r src/dds.imageio/squish src/ptex.imageio/ptex
 
