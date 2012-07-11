@@ -1,3 +1,6 @@
+# TODO:
+#	- man pages?
+#
 # Conditional build:
 %bcond_without	static_libs	# don't build static libraries
 %bcond_without	tbb		# Threading Building Blocks
@@ -37,6 +40,7 @@ BuildRequires:	libcineon-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
+BuildRequires:	libwebp-devel
 BuildRequires:	ptex-devel >= 2
 BuildRequires:	python-devel >= 1:2.6
 BuildRequires:	squish-devel >= 1.10
@@ -216,6 +220,18 @@ OpenImageIO plugin to read Ptex files.
 %description plugin-ptex -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca pliki Ptex.
 
+%package plugin-webp
+Summary:	WebP plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka WebP dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-webp
+OpenImageIO plugin to read and write WebP files.
+
+%description plugin-webp -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki WebP.
+
 %package plugin-tiff
 Summary:	TIFF plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka TIFF dla biblioteki OpenImageIO
@@ -384,6 +400,10 @@ rm -rf $RPM_BUILD_ROOT
 %files plugin-tiff
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/tiff.imageio.so
+
+%files plugin-webp
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/webp.imageio.so
 
 %files apidocs
 %defattr(644,root,root,755)
