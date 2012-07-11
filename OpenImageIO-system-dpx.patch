@@ -18,6 +18,15 @@
  #include "libdpx/DPXColorConverter.h"
  
  #include "typedesc.h"
+@@ -499,7 +499,7 @@
+         case dpx::k1125LineProgressive169AR:
+             tmpstr = "YCbCr 1125p, 16:9 (SMPTE 274M)";
+             break;
+-        case dpx::k255:
++        case 255:
+             // don't set the attribute at all
+             break;
+         default:
 --- OpenImageIO-oiio-7d98ca6/src/dpx.imageio/dpxoutput.cpp.orig	2011-11-05 08:35:00.000000000 +0100
 +++ OpenImageIO-oiio-7d98ca6/src/dpx.imageio/dpxoutput.cpp	2011-11-26 09:03:35.934835274 +0100
 @@ -33,7 +33,7 @@

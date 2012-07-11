@@ -1,0 +1,11 @@
+--- OpenImageIO-oiio-0cae52b/src/libOpenImageIO/CMakeLists.txt.orig	2012-07-09 08:28:46.000000000 +0200
++++ OpenImageIO-oiio-0cae52b/src/libOpenImageIO/CMakeLists.txt	2012-07-11 20:20:34.235460584 +0200
+@@ -197,7 +197,7 @@
+ else ()
+     add_library (OpenImageIO SHARED ${libOpenImageIO_srcs})
+ endif ()
+-target_link_libraries (OpenImageIO ${Boost_LIBRARIES})
++target_link_libraries (OpenImageIO ${Boost_LIBRARIES} ${CMAKE_DL_LIBS})
+ 
+ 
+ 

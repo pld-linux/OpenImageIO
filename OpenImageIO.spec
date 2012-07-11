@@ -13,6 +13,7 @@ License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}#/%{name}-%{version}.tar.gz
 # Source0-md5:	5a24c19c38d48b3e90cf94258fc0256b
+Patch0:		%{name}-link.patch
 Patch2:		%{name}-hdf.patch
 Patch3:		%{name}-system-squish.patch
 Patch4:		%{name}-system-ptex.patch
@@ -246,6 +247,7 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
 %setup -q -n OpenImageIO-oiio-0cae52b
+%patch0 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -272,10 +274,7 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 # name clash with iv
-mv -f $RPM_BUILD_ROOT%{_bindir}/{iv,oiiv}
-
-%{__rm} $RPM_BUILD_ROOT%{_prefix}/{CHANGES,INSTALL,LICENSE}
-%{__rm} $RPM_BUILD_ROOT%{_prefix}/doc/{CLA-*,openimageio.pdf}
+%{__mv} -f $RPM_BUILD_ROOT%{_bindir}/{iv,oiiv}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -293,7 +292,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/iprocess
 %attr(755,root,root) %{_bindir}/maketx
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.0
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.1.0
 %attr(755,root,root) %{_libdir}/bmp.imageio.so
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
