@@ -10,7 +10,7 @@ Release:	0.1
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}#/%{name}-%{version}.tar.gz
-# Source0-md5:	5a24c19c38d48b3e90cf94258fc0256b
+# Source0-md5:	e939f97db2b0cac813c9e166f2353fe6
 Patch0:		%{name}-link.patch
 Patch2:		%{name}-hdf.patch
 Patch3:		%{name}-system-squish.patch
