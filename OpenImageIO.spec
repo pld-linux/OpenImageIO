@@ -268,7 +268,7 @@ Python binding for OpenImageIO library.
 Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
-%setup -q -n OpenImageIO-oiio-0cae52b
+%setup -q -n OpenImageIO-oiio-e9fa4c7
 %patch0 -p1
 %patch2 -p1
 %patch3 -p1
