@@ -1,6 +1,3 @@
-# TODO:
-#	- man pages?
-#
 # Conditional build:
 %bcond_without	static_libs	# don't build static libraries
 %bcond_without	tbb		# Threading Building Blocks
@@ -45,6 +42,7 @@ BuildRequires:	ptex-devel >= 2
 BuildRequires:	python-devel >= 1:2.6
 BuildRequires:	squish-devel >= 1.10
 %{?with_tbb:BuildRequires:	tbb-devel}
+BuildRequires:	txt2man
 BuildRequires:	zlib-devel
 Requires:	ilmbase >= 1.0.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -314,6 +312,7 @@ rm -rf $RPM_BUILD_ROOT
 
 # name clash with iv
 %{__mv} -f $RPM_BUILD_ROOT%{_bindir}/{iv,oiiv}
+%{__mv} -f $RPM_BUILD_ROOT%{_mandir}/man1/{iv,oiiv}.1
 
 # installed as %doc
 %{__rm} -r $RPM_BUILD_ROOT%{_datadir}/doc/openimageio
@@ -347,6 +346,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/softimage.imageio.so
 %attr(755,root,root) %{_libdir}/targa.imageio.so
 %attr(755,root,root) %{_libdir}/zfile.imageio.so
+%{_mandir}/man1/iconvert.1*
+%{_mandir}/man1/idiff.1*
+%{_mandir}/man1/igrep.1*
+%{_mandir}/man1/iinfo.1*
+%{_mandir}/man1/iprocess.1*
+%{_mandir}/man1/maketx.1*
+%{_mandir}/man1/oiiotool.1*
 
 %files devel
 %defattr(644,root,root,755)
@@ -412,6 +418,7 @@ rm -rf $RPM_BUILD_ROOT
 %files iv
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/oiiv
+%{_mandir}/man1/oiiv.1*
 
 %files -n python-OpenImageIO
 %defattr(644,root,root,755)
