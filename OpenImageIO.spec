@@ -1,4 +1,7 @@
+# to bootstrap: build OpenColorIO --without oiio, build OpenImageIO, rebuild OpenColorIO
+#
 # Conditional build:
+%bcond_without	ocio		# OpenColorIO support in library
 %bcond_without	static_libs	# don't build static libraries
 %bcond_without	tbb		# Threading Building Blocks
 #
@@ -20,6 +23,7 @@ Patch6:		%{name}-system-libcineon.patch
 Patch7:		no-gcc-atomics.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
+%{?with_ocio:BuildRequires:	OpenColorIO-devel}
 BuildRequires:	OpenEXR-devel >= 1.6.1
 BuildRequires:	OpenGL-devel
 BuildRequires:	QtCore-devel
@@ -33,12 +37,14 @@ BuildRequires:	dpx-devel
 BuildRequires:	glew-devel >= 1.5.1
 BuildRequires:	hdf5-devel
 BuildRequires:	ilmbase-devel >= 1.0.1
+BuildRequires:	libstdc++-devel
 BuildRequires:	jasper-devel
 BuildRequires:	libcineon-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libwebp-devel
+BuildRequires:	pugixml-devel
 BuildRequires:	ptex-devel >= 2
 BuildRequires:	python-devel >= 1:2.6
 BuildRequires:	squish-devel >= 1.10
@@ -75,6 +81,7 @@ Summary:	Header files for OpenImageIO library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki OpenImageIO
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	libstdc++-devel
 
 %description devel
 Header files for OpenImageIO library.
@@ -295,16 +302,20 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %endif
 
 %{__rm} -r src/dds.imageio/squish src/ptex.imageio/ptex
+# when using system pugixml, don't use hacked headers
+%{__rm} src/include/pugi*.hpp
 
 %build
 install -d build
 cd build
 %cmake ../src \
 	-DEMBEDPLUGINS=OFF \
-	-DPYLIB_INSTALL_DIR=%{py_sitedir} \
 	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
+	-DPYLIB_INSTALL_DIR=%{py_sitedir} \
 	-DPYTHON_VERSION=%{py_ver} \
-	%{!?with_tbb:-DUSE_TBB=OFF} \
+	-DUSE_EXTERNAL_PUGIXML=ON \
+	%{!?with_ocio:-DUSE_OCIO=OFF} \
+	%{!?with_tbb:-DUSE_TBB=OFF}
 
 %{__make}
 
