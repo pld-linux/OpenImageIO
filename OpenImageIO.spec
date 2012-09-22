@@ -8,12 +8,12 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	1.0.7
-Release:	7
+Version:	1.0.9
+Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}#/%{name}-%{version}.tar.gz
-# Source0-md5:	e939f97db2b0cac813c9e166f2353fe6
+# Source0-md5:	fad47ccfe619c203e5395afc1ebed4e2
 Patch0:		%{name}-link.patch
 Patch2:		%{name}-hdf.patch
 Patch3:		%{name}-system-squish.patch
@@ -290,7 +290,7 @@ Python binding for OpenImageIO library.
 Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
-%setup -q -n OpenImageIO-oiio-e9fa4c7
+%setup -q -n OpenImageIO-oiio-0b78dec
 %patch0 -p1
 %patch2 -p1
 %patch3 -p1
