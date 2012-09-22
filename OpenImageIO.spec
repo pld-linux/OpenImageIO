@@ -44,6 +44,7 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libwebp-devel
+BuildRequires:	openjpeg-devel
 BuildRequires:	pugixml-devel
 BuildRequires:	ptex-devel >= 2
 BuildRequires:	python-devel >= 1:2.6
