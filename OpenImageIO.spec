@@ -311,6 +311,7 @@ install -d build
 cd build
 %cmake ../src \
 	-DEMBEDPLUGINS=OFF \
+	-DOPENJPEG_INCLUDE_DIR=%{_includedir}/openjpeg-1.5 \
 	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
 	-DPYLIB_INSTALL_DIR=%{py_sitedir} \
 	-DPYTHON_VERSION=%{py_ver} \
