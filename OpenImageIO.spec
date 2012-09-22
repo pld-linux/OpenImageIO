@@ -12,7 +12,7 @@ Version:	1.0.9
 Release:	1
 License:	BSD
 Group:		Libraries
-Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}#/%{name}-%{version}.tar.gz
+Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}/%{name}-%{version}.tar.gz
 # Source0-md5:	fad47ccfe619c203e5395afc1ebed4e2
 Patch0:		%{name}-link.patch
 Patch2:		%{name}-hdf.patch
