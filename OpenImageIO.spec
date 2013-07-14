@@ -8,12 +8,12 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	1.0.9
-Release:	5
+Version:	1.2.0
+Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	fad47ccfe619c203e5395afc1ebed4e2
+# Source0-md5:	8738dd9b24fc4f0cb3eebb094347104a
 Patch0:		%{name}-link.patch
 Patch2:		%{name}-hdf.patch
 Patch3:		%{name}-system-squish.patch
@@ -21,6 +21,7 @@ Patch4:		%{name}-system-ptex.patch
 Patch5:		%{name}-system-dpx.patch
 Patch6:		%{name}-system-libcineon.patch
 Patch7:		no-gcc-atomics.patch
+Patch8:		%{name}-werror.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
@@ -291,16 +292,17 @@ Python binding for OpenImageIO library.
 Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
-%setup -q -n OpenImageIO-oiio-0b78dec
+%setup -q -n OpenImageIO-oiio-f4d79c0
 %patch0 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%ifarch i486
+%ifarch i386 i486
 %patch7 -p1
 %endif
+%patch8 -p1
 
 %{__rm} -r src/dds.imageio/squish src/ptex.imageio/ptex
 # when using system pugixml, don't use hacked headers
@@ -342,16 +344,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGES CREDITS LICENSE README
+%doc CHANGES CREDITS LICENSE README.rst
 %attr(755,root,root) %{_bindir}/iconvert
 %attr(755,root,root) %{_bindir}/idiff
 %attr(755,root,root) %{_bindir}/igrep
 %attr(755,root,root) %{_bindir}/iinfo
-%attr(755,root,root) %{_bindir}/iprocess
 %attr(755,root,root) %{_bindir}/maketx
 %attr(755,root,root) %{_bindir}/oiiotool
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.1.0
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.1.2
 %attr(755,root,root) %{_libdir}/bmp.imageio.so
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
@@ -367,7 +368,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/idiff.1*
 %{_mandir}/man1/igrep.1*
 %{_mandir}/man1/iinfo.1*
-%{_mandir}/man1/iprocess.1*
 %{_mandir}/man1/maketx.1*
 %{_mandir}/man1/oiiotool.1*
 
