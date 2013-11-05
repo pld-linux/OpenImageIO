@@ -1,0 +1,9 @@
+--- OpenImageIO-oiio-bcdad81/src/field3d.imageio/CMakeLists.txt~	2013-11-01 18:03:46.000000000 +0100
++++ OpenImageIO-oiio-bcdad81/src/field3d.imageio/CMakeLists.txt	2013-11-05 21:12:41.033996632 +0100
+@@ -1,5 +1,5 @@
+ if (USE_FIELD3D)
+-  if (FIELD3D_FOUND and HDF5_FOUND)
++  if (FIELD3D_FOUND AND HDF5_FOUND)
+     include_directories (${FIELD3D_INCLUDES})
+     add_oiio_plugin (field3dinput.cpp field3doutput.cpp
+                      LINK_LIBRARIES ${FIELD3D_LIBRARY}

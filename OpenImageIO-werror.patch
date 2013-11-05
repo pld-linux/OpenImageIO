@@ -1,16 +1,3 @@
---- OpenImageIO-oiio-f4d79c0/src/libOpenImageIO/fmath_test.cpp.orig	2013-07-08 21:47:25.000000000 +0200
-+++ OpenImageIO-oiio-f4d79c0/src/libOpenImageIO/fmath_test.cpp	2013-07-14 17:32:19.946145637 +0200
-@@ -72,8 +72,8 @@
-     OIIO_CHECK_EQUAL ((bit_range_convert<2,20>(3)), 1048575);
-     OIIO_CHECK_EQUAL ((bit_range_convert<20,2>(1048575)), 3);
-     OIIO_CHECK_EQUAL ((bit_range_convert<20,21>(1048575)), 2097151);
--    OIIO_CHECK_EQUAL ((bit_range_convert<32,32>(4294967295)), 4294967295);
--    OIIO_CHECK_EQUAL ((bit_range_convert<32,16>(4294967295)), 65535);
-+    OIIO_CHECK_EQUAL ((bit_range_convert<32,32>(4294967295U)), 4294967295U);
-+    OIIO_CHECK_EQUAL ((bit_range_convert<32,16>(4294967295U)), 65535);
- // These are not expected to work, since bit_range_convert only takes a
- // regular 'unsigned int' as parameter.  If we need >32 bit conversion,
- // we need to add a uint64_t version of bit_range_convert.
 --- OpenImageIO-oiio-f4d79c0/src/dpx.imageio/dpxinput.cpp.orig	2013-07-14 17:33:27.426142801 +0200
 +++ OpenImageIO-oiio-f4d79c0/src/dpx.imageio/dpxinput.cpp	2013-07-14 18:10:42.519382338 +0200
 @@ -467,7 +467,7 @@
