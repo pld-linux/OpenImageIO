@@ -9,7 +9,7 @@ Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
 Version:	1.2.3
-Release:	2
+Release:	3
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}/%{name}-%{version}.tar.gz
@@ -21,8 +21,10 @@ Patch3:		%{name}-system-squish.patch
 Patch4:		%{name}-system-ptex.patch
 Patch5:		%{name}-system-dpx.patch
 Patch6:		%{name}-system-libcineon.patch
-Patch7:		no-gcc-atomics.patch
-Patch8:		%{name}-werror.patch
+Patch7:		%{name}-werror.patch
+Patch8:		0002-Fix_IlmBase_issue.patch
+Patch9:		0003-Fix_multiarch_paths.patch
+Patch10:	0004-Fix_FTBFS_on_atomic_operations.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
@@ -301,10 +303,10 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%ifarch i386 i486
 %patch7 -p1
-%endif
 %patch8 -p1
+%patch9 -p1
+%patch10 -p1
 
 %{__rm} -r src/dds.imageio/squish src/ptex.imageio/ptex
 # when using system pugixml, don't use hacked headers

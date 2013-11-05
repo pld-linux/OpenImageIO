@@ -1,0 +1,48 @@
+From: Roland Stigge <stigge@antcom.de>
+Date: Tue, 21 May 2013 15:09:00 +0200
+Subject: Fix_FTBFS_on_atomic_operations
+
+---
+ src/include/thread.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/include/thread.h b/src/include/thread.h
+index e389ebb..4735796 100644
+--- a/src/include/thread.h
++++ b/src/include/thread.h
+@@ -220,7 +220,7 @@ inline int
+ atomic_exchange_and_add (volatile int *at, int x)
+ {
+ #ifdef USE_GCC_ATOMICS
+-    return __sync_fetch_and_add ((int *)at, x);
++    return __atomic_fetch_add ((int *)at, x, __ATOMIC_SEQ_CST);
+ #elif USE_TBB
+     atomic<int> *a = (atomic<int> *)at;
+     return a->fetch_and_add (x);
+@@ -238,7 +238,7 @@ inline long long
+ atomic_exchange_and_add (volatile long long *at, long long x)
+ {
+ #ifdef USE_GCC_ATOMICS
+-    return __sync_fetch_and_add (at, x);
++    return __atomic_fetch_add (at, x, __ATOMIC_SEQ_CST);
+ #elif USE_TBB
+     atomic<long long> *a = (atomic<long long> *)at;
+     return a->fetch_and_add (x);
+@@ -266,7 +266,7 @@ inline bool
+ atomic_compare_and_exchange (volatile int *at, int compareval, int newval)
+ {
+ #ifdef USE_GCC_ATOMICS
+-    return __sync_bool_compare_and_swap (at, compareval, newval);
++    return __atomic_compare_exchange_n (at, &compareval, newval, false, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST);
+ #elif USE_TBB
+     atomic<int> *a = (atomic<int> *)at;
+     return a->compare_and_swap (newval, compareval) == newval;
+@@ -283,7 +283,7 @@ inline bool
+ atomic_compare_and_exchange (volatile long long *at, long long compareval, long long newval)
+ {
+ #ifdef USE_GCC_ATOMICS
+-    return __sync_bool_compare_and_swap (at, compareval, newval);
++    return __atomic_compare_exchange_n (at, &compareval, newval, false, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST);
+ #elif USE_TBB
+     atomic<long long> *a = (atomic<long long> *)at;
+     return a->compare_and_swap (newval, compareval) == newval;

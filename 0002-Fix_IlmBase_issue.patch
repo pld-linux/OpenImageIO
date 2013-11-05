@@ -1,0 +1,23 @@
+From: "Matteo F. Vescovi" <mfv.debian@gmail.com>
+Date: Fri, 21 Dec 2012 16:31:29 +0100
+Subject: Fix_IlmBase_issue
+
+This first patch hides the private symbols
+even on kFreeBSD and Hurd, besides Linux.
+---
+ src/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index adb380c..71f9a3e 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -130,7 +130,7 @@ if (CMAKE_COMPILER_IS_CLANG OR CMAKE_COMPILER_IS_GNUCC)
+         # Turn default symbol visibility to hidden
+         set (VISIBILITY_COMMAND "-fvisibility=hidden -fvisibility-inlines-hidden")
+         add_definitions (${VISIBILITY_COMMAND})
+-        if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
++        if (CMAKE_SYSTEM_NAME MATCHES "Linux|kFreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "GNU")
+             # Linux: also hide all the symbols of dependent libraries to
+             # prevent clashes if an app using OIIO is linked against
+             # other verions of our dependencies.
