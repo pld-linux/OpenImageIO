@@ -29,7 +29,6 @@ Patch6:		%{name}-system-libcineon.patch
 Patch7:		%{name}-werror.patch
 Patch8:		0002-Fix_IlmBase_issue.patch
 Patch9:		0003-Fix_multiarch_paths.patch
-Patch10:	0004-Fix_FTBFS_on_atomic_operations.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
@@ -311,7 +310,6 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch10 -p1
 
 %{__rm} -r src/dds.imageio/squish src/ptex.imageio/ptex
 # when using system pugixml, don't use hacked headers
