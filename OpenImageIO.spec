@@ -14,7 +14,7 @@ Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
 Version:	1.2.3
-Release:	3
+Release:	4
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}/%{name}-%{version}.tar.gz
@@ -319,6 +319,9 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 install -d build
 cd build
 %cmake ../src \
+%ifarch i486
+	-DNOTHREADS=1 \
+%endif
 	-DEMBEDPLUGINS=OFF \
 	-DOPENJPEG_INCLUDE_DIR=%{_includedir}/openjpeg-1.5 \
 	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
