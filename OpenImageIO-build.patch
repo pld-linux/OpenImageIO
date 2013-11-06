@@ -7,3 +7,13 @@
      include_directories (${FIELD3D_INCLUDES})
      add_oiio_plugin (field3dinput.cpp field3doutput.cpp
                       LINK_LIBRARIES ${FIELD3D_LIBRARY}
+--- OpenImageIO-oiio-bcdad81/src/include/thread.h~	2013-11-01 18:03:46.000000000 +0100
++++ OpenImageIO-oiio-bcdad81/src/include/thread.h	2013-11-06 06:22:43.859550166 +0100
+@@ -128,6 +128,7 @@
+     void unlock () { }
+     void lock_shared () { }
+     void unlock_shared () { }
++    bool try_lock () { return true; }
+ };
+ 
+ /// Null lock that can be substituted for a real one to test how much
