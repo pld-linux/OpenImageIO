@@ -5,8 +5,11 @@
 %bcond_without	static_libs	# don't build static libraries
 %bcond_without	tbb		# Threading Building Blocks
 #
-%ifarch i486
+%ifarch i386 i486
 # https://github.com/OpenImageIO/oiio/issues/583
+%undefine	with_tbb
+%endif
+%ifnarch %{ix86} %{x8664} %{arm} ia64 ppc ppc64
 %undefine	with_tbb
 %endif
 #
@@ -319,7 +322,7 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 install -d build
 cd build
 %cmake ../src \
-%ifarch i486
+%ifarch i386 i486
 	-DNOTHREADS=1 \
 %endif
 	-DEMBEDPLUGINS=OFF \
