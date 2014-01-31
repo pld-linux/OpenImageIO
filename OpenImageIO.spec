@@ -328,6 +328,7 @@ cd build
 	-DEMBEDPLUGINS=OFF \
 	-DOPENJPEG_INCLUDE_DIR=%{_includedir}/openjpeg-1.5 \
 	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
+	-DLIB_INSTALL_DIR:PATH=%{_libdir} \
 	-DPYLIB_INSTALL_DIR=%{py_sitedir} \
 	-DPYTHON_VERSION=%{py_ver} \
 	-DUSE_EXTERNAL_PUGIXML=ON \
