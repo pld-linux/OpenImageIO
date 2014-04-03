@@ -17,7 +17,7 @@ Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
 Version:	1.2.3
-Release:	9
+Release:	10
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}/%{name}-%{version}.tar.gz
@@ -48,16 +48,16 @@ BuildRequires:	dpx-devel
 BuildRequires:	glew-devel >= 1.5.1
 BuildRequires:	hdf5-devel
 BuildRequires:	ilmbase-devel >= 1.0.1
-BuildRequires:	libstdc++-devel
 BuildRequires:	jasper-devel
 BuildRequires:	libcineon-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
+BuildRequires:	libstdc++-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libwebp-devel
 BuildRequires:	openjpeg-devel
-BuildRequires:	pugixml-devel
 BuildRequires:	ptex-devel >= 2
+BuildRequires:	pugixml-devel
 BuildRequires:	python-devel >= 1:2.6
 BuildRequires:	squish-devel >= 1.10
 %{?with_tbb:BuildRequires:	tbb-devel}
@@ -173,8 +173,8 @@ OpenImageIO plugin to read and write JPEG files (with TIFF/EXIF
 information).
 
 %description plugin-jpeg -l pl.UTF-8
-Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki JPEG
-(wraz z informacjami TIFF/EXIF).
+Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki JPEG (wraz
+z informacjami TIFF/EXIF).
 
 %package plugin-jpeg2000
 Summary:	JPEG2000 plugin for OpenImageIO library
@@ -266,6 +266,9 @@ Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki TIFF.
 Summary:	Programmer documentation for OpenImageIO library
 Summary(pl.UTF-8):	Dokumentacja programisty do biblioteki OpenImageIO
 Group:		Documentation
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description apidocs
 Programmer documentation for OpenImageIO library.
@@ -302,7 +305,7 @@ Python binding for OpenImageIO library.
 Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
-%setup -q -n OpenImageIO-oiio-bcdad81
+%setup -q -n %{name}-oiio-bcdad81
 %patch0 -p1
 
 %patch2 -p1
@@ -348,7 +351,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__mv} -f $RPM_BUILD_ROOT%{_mandir}/man1/{iv,oiiv}.1
 
 # installed as %doc
-%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/doc/openimageio
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/openimageio
 
 %clean
 rm -rf $RPM_BUILD_ROOT
