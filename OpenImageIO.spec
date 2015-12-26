@@ -43,6 +43,8 @@ BuildRequires:	boost-devel >= 1.35
 BuildRequires:	boost-python-devel >= 1.35
 BuildRequires:	cmake >= 2.6
 BuildRequires:	dpx-devel
+BuildRequires:	ffmpeg-devel
+BuildRequires:	giflib-devel
 BuildRequires:	glew-devel >= 1.5.1
 BuildRequires:	hdf5-devel
 BuildRequires:	ilmbase-devel >= 1.0.1
@@ -136,6 +138,18 @@ OpenImageIO plugin to read and write DPX files.
 %description plugin-dpx -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki DPX.
 
+%package plugin-ffmpeg
+Summary:	FFmpeg plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka FFmpeg dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-ffmpeg
+OpenImageIO plugin to read FFmpeg files.
+
+%description plugin-ffmpeg -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca pliki FFmpeg.
+
 %package plugin-field3d
 Summary:	Field3D plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka Field3D dla biblioteki OpenImageIO
@@ -147,6 +161,18 @@ OpenImageIO plugin to read Field3D files.
 
 %description plugin-field3d -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca pliki Field3D.
+
+%package plugin-gif
+Summary:	Gif plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka Gif dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-gif
+OpenImageIO plugin to read GIF files.
+
+%description plugin-gif -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca pliki GIF.
 
 %package plugin-ico
 Summary:	ICO plugin for OpenImageIO library
@@ -366,7 +392,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/maketx
 %attr(755,root,root) %{_bindir}/oiiotool
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.1.2
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.1.6
 %attr(755,root,root) %{_libdir}/bmp.imageio.so
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
@@ -385,9 +411,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/maketx.1*
 %{_mandir}/man1/oiiotool.1*
 
+%attr(755,root,root) %{_libdir}/ffmpeg.imageio.so
+%attr(755,root,root) %{_libdir}/gif.imageio.so
+%attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.1.6
+
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so
+%attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so
 %{_includedir}/OpenImageIO
 
 %files plugin-cineon
