@@ -9,17 +9,15 @@
          case dpx::kUndefined:
              tmpstr = "Undefined";
              break;
---- OpenImageIO-oiio-bcdad81/src/libOpenImageIO/imagebufalgo.cpp~	2013-11-01 18:03:46.000000000 +0100
-+++ OpenImageIO-oiio-bcdad81/src/libOpenImageIO/imagebufalgo.cpp	2015-02-18 17:15:01.274966027 +0100
-@@ -1063,9 +1063,9 @@
-         if (error)
-             continue;  // ignore errors
-         // now, draw to our target surface
--        for (int j = 0;  j < slot->bitmap.rows; ++j) {
-+        for (unsigned int j = 0;  j < slot->bitmap.rows; ++j) {
-             int ry = y + j - slot->bitmap_top;
--            for (int i = 0;  i < slot->bitmap.width; ++i) {
-+            for (unsigned int i = 0;  i < slot->bitmap.width; ++i) {
-                 int rx = x + i + slot->bitmap_left;
-                 float b = slot->bitmap.buffer[slot->bitmap.pitch*j+i] / 255.0f;
-                 R.getpixel (rx, ry, pixelcolor);
+
+--- /home/users/baggins/devel/PLD/rpm/BUILD/OpenImageIO-oiio-4070df8/src/libtexture/texturesys.cpp~	2015-12-19 07:44:03.000000000 +0100
++++ /home/users/baggins/devel/PLD/rpm/BUILD/OpenImageIO-oiio-4070df8/src/libtexture/texturesys.cpp	2015-12-26 10:38:06.735886871 +0100
+@@ -2038,7 +2038,7 @@
+                     int pixelsize = tile->pixelsize();
+                     int offset = pixelsize * (tile_t * spec.tile_width + tile_s);
+                     offset += (firstchannel - id.chbegin()) * channelsize;
+-                    DASSERT ((size_t)offset < spec.tile_width*spec.tile_height*spec.tile_depth*pixelsize);
++                    DASSERT ((size_t)offset < (size_t)spec.tile_width*spec.tile_height*spec.tile_depth*pixelsize);
+                     if (pixeltype == TypeDesc::UINT8)
+                         texel_simd[j][i] = uchar2float4 ((const unsigned char *)(tile->bytedata() + offset));
+                     else if (pixeltype == TypeDesc::UINT16)

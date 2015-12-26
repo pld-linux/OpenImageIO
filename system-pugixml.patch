@@ -1,0 +1,22 @@
+--- OpenImageIO-oiio-4070df8/src/libOpenImageIO/formatspec.cpp~	2015-12-19 07:44:03.000000000 +0100
++++ OpenImageIO-oiio-4070df8/src/libOpenImageIO/formatspec.cpp	2015-12-26 10:06:44.635447040 +0100
+@@ -42,7 +42,7 @@
+ #include "OpenImageIO/fmath.h"
+ #include "OpenImageIO/imageio.h"
+ #include "imageio_pvt.h"
+-#include "OpenImageIO/pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ 
+ OIIO_NAMESPACE_BEGIN
+--- OpenImageIO-oiio-4070df8/src/libOpenImageIO/xmp.cpp~	2015-12-19 07:44:03.000000000 +0100
++++ OpenImageIO-oiio-4070df8/src/libOpenImageIO/xmp.cpp	2015-12-26 10:07:06.745648169 +0100
+@@ -37,7 +37,7 @@
+ #include "OpenImageIO/strutil.h"
+ #include "OpenImageIO/fmath.h"
+ #include "OpenImageIO/imageio.h"
+-#include "OpenImageIO/pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ #define DEBUG_XMP_READ  0
+ #define DEBUG_XMP_WRITE 0
