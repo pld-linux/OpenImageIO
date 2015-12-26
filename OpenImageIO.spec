@@ -23,15 +23,13 @@ Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}/%{name}-%{version}.tar.gz
 # Source0-md5:	1f614ff6129c60bfcadbb4cefe86325d
 Patch0:		%{name}-link.patch
-Patch3:		%{name}-system-squish.patch
-Patch4:		%{name}-system-ptex.patch
-Patch5:		%{name}-system-dpx.patch
-Patch6:		%{name}-system-libcineon.patch
-Patch7:		%{name}-werror.patch
-Patch8:		0002-Fix_IlmBase_issue.patch
-Patch9:		0003-Fix_multiarch_paths.patch
-Patch10:	system-pugixml.patch
-Patch11:	fix-types.patch
+Patch1:		%{name}-system-squish.patch
+Patch2:		%{name}-system-ptex.patch
+Patch3:		%{name}-system-dpx.patch
+Patch4:		%{name}-system-libcineon.patch
+Patch5:		%{name}-werror.patch
+Patch6:		system-pugixml.patch
+Patch7:		fix-types.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
@@ -307,13 +305,13 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %prep
 %setup -q -n %{name}-oiio-4070df8
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch10 -p1
-%patch11 -p1
 
 %{__rm} -r src/dds.imageio/squish src/ptex.imageio/ptex
 # when using system pugixml, don't use hacked headers
