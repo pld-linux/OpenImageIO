@@ -10,8 +10,8 @@
              tmpstr = "Undefined";
              break;
 
---- /home/users/baggins/devel/PLD/rpm/BUILD/OpenImageIO-oiio-4070df8/src/libtexture/texturesys.cpp~	2015-12-19 07:44:03.000000000 +0100
-+++ /home/users/baggins/devel/PLD/rpm/BUILD/OpenImageIO-oiio-4070df8/src/libtexture/texturesys.cpp	2015-12-26 10:38:06.735886871 +0100
+--- OpenImageIO-oiio-4070df8/src/libtexture/texturesys.cpp~	2015-12-19 07:44:03.000000000 +0100
++++ OpenImageIO-oiio-4070df8/src/libtexture/texturesys.cpp	2015-12-26 10:38:06.735886871 +0100
 @@ -2038,7 +2038,7 @@
                      int pixelsize = tile->pixelsize();
                      int offset = pixelsize * (tile_t * spec.tile_width + tile_s);
