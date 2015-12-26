@@ -52,6 +52,7 @@ BuildRequires:	jasper-devel
 BuildRequires:	libcineon-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
+BuildRequires:	libraw-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libwebp-devel
@@ -262,6 +263,18 @@ OpenImageIO plugin to read Ptex files.
 %description plugin-ptex -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca pliki Ptex.
 
+%package plugin-raw
+Summary:	RAW plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka RAW dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-raw
+OpenImageIO plugin to readTRAW files.
+
+%description plugin-raw -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca pliki RAW.
+
 %package plugin-webp
 Summary:	WebP plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka WebP dla biblioteki OpenImageIO
@@ -393,6 +406,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/oiiotool
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.1.6
+%attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.1.6
 %attr(755,root,root) %{_libdir}/bmp.imageio.so
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
@@ -410,11 +425,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/iinfo.1*
 %{_mandir}/man1/maketx.1*
 %{_mandir}/man1/oiiotool.1*
-
-%attr(755,root,root) %{_libdir}/ffmpeg.imageio.so
-%attr(755,root,root) %{_libdir}/gif.imageio.so
-%attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.1.6
 
 %files devel
 %defattr(644,root,root,755)
@@ -434,9 +444,17 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/dpx.imageio.so
 
+%files plugin-ffmpeg
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/ffmpeg.imageio.so
+
 %files plugin-field3d
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/field3d.imageio.so
+
+%files plugin-gif
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/gif.imageio.so
 
 %files plugin-ico
 %defattr(644,root,root,755)
@@ -465,6 +483,10 @@ rm -rf $RPM_BUILD_ROOT
 %files plugin-ptex
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/ptex.imageio.so
+
+%files plugin-raw
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/raw.imageio.so
 
 %files plugin-tiff
 %defattr(644,root,root,755)
