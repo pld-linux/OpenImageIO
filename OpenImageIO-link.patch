@@ -9,3 +9,14 @@
  
  # Link against system TBB library if specified
  if (USE_TBB AND USE_EXTERNAL_TBB)
+--- OpenImageIO-oiio-4070df8/src/libutil/CMakeLists.txt~	2015-12-19 07:44:03.000000000 +0100
++++ OpenImageIO-oiio-4070df8/src/libutil/CMakeLists.txt	2015-12-26 10:54:02.944577313 +0100
+@@ -11,7 +11,7 @@
+ endif ()
+ target_link_libraries (OpenImageIO_Util
+                            ${VISIBILITY_COMMAND} ${VISIBILITY_MAP_COMMAND}
+-                           ${Boost_LIBRARIES})
++			   ${Boost_LIBRARIES} ${CMAKE_DL_LIBS})
+ if (WIN32)
+     target_link_libraries (OpenImageIO_Util psapi.lib)
+ endif ()
