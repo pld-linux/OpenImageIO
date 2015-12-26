@@ -17,7 +17,7 @@ Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
 Version:	1.6.8
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}/%{name}-%{version}.tar.gz
@@ -348,7 +348,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__mv} -f $RPM_BUILD_ROOT%{_mandir}/man1/{iv,oiiv}.1
 
 # installed as %doc
-%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/openimageio
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/OpenImageIO
 
 %clean
 rm -rf $RPM_BUILD_ROOT
