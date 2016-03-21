@@ -1,0 +1,29 @@
+--- OpenImageIO-oiio-4070df8/src/ffmpeg.imageio/ffmpeginput.cpp~	2015-12-19 07:44:03.000000000 +0100
++++ OpenImageIO-oiio-4070df8/src/ffmpeg.imageio/ffmpeginput.cpp	2016-03-21 10:21:22.218287557 +0100
+@@ -236,7 +236,7 @@
+     m_frame = av_frame_alloc();
+     m_rgb_frame = av_frame_alloc();
+     m_rgb_buffer.resize(
+-        avpicture_get_size (PIX_FMT_RGB24,
++        avpicture_get_size (AV_PIX_FMT_RGB24,
+         m_codec_context->width,
+         m_codec_context->height),
+         0
+@@ -264,7 +264,7 @@
+         pixFormat,
+         m_codec_context->width,
+         m_codec_context->height,
+-        PIX_FMT_RGB24,
++        AV_PIX_FMT_RGB24,
+         SWS_AREA,
+         NULL,
+         NULL,
+@@ -361,7 +361,7 @@
+                 (
+                     reinterpret_cast<AVPicture*>(m_rgb_frame),
+                     &m_rgb_buffer[0],
+-                    PIX_FMT_RGB24,
++                    AV_PIX_FMT_RGB24,
+                     m_codec_context->width,
+                     m_codec_context->height
+                 );
