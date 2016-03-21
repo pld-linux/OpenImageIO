@@ -1,0 +1,28 @@
+--- OpenImageIO-oiio-4070df8/src/cmake/externalpackages.cmake~	2015-12-19 07:44:03.000000000 +0100
++++ OpenImageIO-oiio-4070df8/src/cmake/externalpackages.cmake	2016-03-21 11:06:58.754135430 +0100
+@@ -504,6 +504,14 @@
+                         /usr/local/lib
+                         /opt/local/lib
+                  )
++    find_library (OpenCV_LIBS_videoio
++                  NAMES opencv_videoio
++                  PATHS "${THIRD_PARTY_TOOLS_HOME}/lib/"
++                        "${PROJECT_SOURCE_DIR}/lib"
++                        "${OpenCV_HOME}/lib"
++                        /usr/local/lib
++                        /opt/local/lib
++                 )
+     set (OpenCV_LIBS "${OpenCV_LIBS} ${OpenCV_LIBS_highgui}")
+     if (OpenCV_INCLUDE_DIR AND OpenCV_LIBS)
+         set (OpenCV_FOUND TRUE)
+--- OpenImageIO-oiio-4070df8/src/libOpenImageIO/CMakeLists.txt~	2016-03-21 11:03:35.000000000 +0100
++++ OpenImageIO-oiio-4070df8/src/libOpenImageIO/CMakeLists.txt	2016-03-21 11:08:09.865289491 +0100
+@@ -255,7 +255,7 @@
+ # Include OpenCV if using it
+ if (OpenCV_FOUND)
+     include_directories (${OpenCV_INCLUDE_DIR})
+-    target_link_libraries (OpenImageIO opencv_core opencv_highgui)
++    target_link_libraries (OpenImageIO opencv_core opencv_highgui opencv_videoio)
+ endif ()
+ 
+ # Include OpenSSL if using it

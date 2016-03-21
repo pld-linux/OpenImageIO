@@ -17,7 +17,7 @@ Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
 Version:	1.6.8
-Release:	4
+Release:	5
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}/%{name}-%{version}.tar.gz
@@ -31,6 +31,7 @@ Patch5:		%{name}-werror.patch
 Patch6:		system-pugixml.patch
 Patch7:		fix-types.patch
 Patch8:		ffmpeg3.patch
+Patch9:		opencv3.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
@@ -353,6 +354,7 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 %{__rm} -r src/dds.imageio/squish src/ptex.imageio/ptex
 # when using system pugixml, don't use hacked headers
