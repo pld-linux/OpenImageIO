@@ -20,8 +20,8 @@ Version:	1.7.11
 Release:	1
 License:	BSD
 Group:		Libraries
-Source0:	https://github.com/OpenImageIO/oiio/archive/Release-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	f7c90f9a8c37d981d5da50baf3750aa1
+Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	bd9338d99dff81f238e17d78c333a85e
 Patch0:		%{name}-link.patch
 Patch1:		%{name}-system-squish.patch
 Patch2:		%{name}-system-dpx.patch
