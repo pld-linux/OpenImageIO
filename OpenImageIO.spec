@@ -16,22 +16,16 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	1.6.8
-Release:	7
+Version:	1.7.11
+Release:	1
 License:	BSD
 Group:		Libraries
-Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	1f614ff6129c60bfcadbb4cefe86325d
+Source0:	https://github.com/OpenImageIO/oiio/archive/Release-%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	f7c90f9a8c37d981d5da50baf3750aa1
 Patch0:		%{name}-link.patch
 Patch1:		%{name}-system-squish.patch
-Patch2:		%{name}-system-ptex.patch
-Patch3:		%{name}-system-dpx.patch
-Patch4:		%{name}-system-libcineon.patch
-Patch5:		%{name}-werror.patch
-Patch6:		system-pugixml.patch
-Patch7:		fix-types.patch
-Patch8:		ffmpeg3.patch
-Patch9:		opencv3.patch
+Patch2:		%{name}-system-dpx.patch
+Patch3:		%{name}-system-libcineon.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
@@ -59,7 +53,7 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libwebp-devel
 BuildRequires:	openjpeg-devel
-BuildRequires:	ptex-devel >= 2
+BuildRequires:	ptex-devel >= 2.1
 BuildRequires:	pugixml-devel
 BuildRequires:	python-devel >= 1:2.6
 BuildRequires:	squish-devel >= 1.10
@@ -344,19 +338,13 @@ Python binding for OpenImageIO library.
 Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
-%setup -q -n %{name}-oiio-4070df8
+%setup -q -n %{name}-oiio-6950fb8
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
 
-%{__rm} -r src/dds.imageio/squish src/ptex.imageio/ptex
+%{__rm} -r src/dds.imageio/squish
 # when using system pugixml, don't use hacked headers
 %{__rm} src/include/OpenImageIO/pugi*.{c,h}pp
 
@@ -388,8 +376,7 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 # name clash with iv
-%{__mv} -f $RPM_BUILD_ROOT%{_bindir}/{iv,oiiv}
-%{__mv} -f $RPM_BUILD_ROOT%{_mandir}/man1/{iv,oiiv}.1
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/{iv,oiiv}
 
 # installed as %doc
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/OpenImageIO
@@ -402,7 +389,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGES CREDITS LICENSE README.rst
+%doc CHANGES.md CREDITS.md LICENSE README.md
 %attr(755,root,root) %{_bindir}/iconvert
 %attr(755,root,root) %{_bindir}/idiff
 %attr(755,root,root) %{_bindir}/igrep
@@ -410,9 +397,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/maketx
 %attr(755,root,root) %{_bindir}/oiiotool
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.1.6
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.1.7
 %attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.1.6
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.1.7
 %attr(755,root,root) %{_libdir}/bmp.imageio.so
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
@@ -508,7 +495,6 @@ rm -rf $RPM_BUILD_ROOT
 %files iv
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/oiiv
-%{_mandir}/man1/oiiv.1*
 
 %files -n python-OpenImageIO
 %defattr(644,root,root,755)
