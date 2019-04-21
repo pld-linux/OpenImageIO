@@ -38,6 +38,7 @@ BuildRequires:	QtOpenGL-devel
 BuildRequires:	boost-devel >= 1.35
 BuildRequires:	boost-python-devel >= 1.35
 BuildRequires:	cmake >= 2.6
+BuildRequires:	dcmtk-devel
 BuildRequires:	ffmpeg-devel
 BuildRequires:	giflib-devel
 BuildRequires:	glew-devel >= 1.5.1
@@ -110,6 +111,19 @@ OpenImageIO plugin to read Cineon files.
 
 %description plugin-cineon -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca pliki Cineon.
+
+%package plugin-dicom
+Summary:	DICOM plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka DICOM dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+Requires:	squish >= 1.10
+
+%description plugin-dicom
+OpenImageIO plugin to read DICOM files.
+
+%description plugin-dicom -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca pliki DICOM.
 
 %package plugin-dds
 Summary:	DDS plugin for OpenImageIO library
@@ -414,7 +428,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/softimage.imageio.so
 %attr(755,root,root) %{_libdir}/targa.imageio.so
 %attr(755,root,root) %{_libdir}/zfile.imageio.so
-%attr(755,root,root) %{_libdir}/dicom.imageio.so
 %attr(755,root,root) %{_libdir}/null.imageio.so
 %{_mandir}/man1/iconvert.1*
 %{_mandir}/man1/idiff.1*
@@ -434,6 +447,10 @@ rm -rf $RPM_BUILD_ROOT
 %files plugin-cineon
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/cineon.imageio.so
+
+%files plugin-dicom
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/dicom.imageio.so
 
 %files plugin-dds
 %defattr(644,root,root,755)
