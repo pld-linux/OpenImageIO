@@ -16,17 +16,16 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	1.7.11
-Release:	6
+Version:	2.0.7
+Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	bd9338d99dff81f238e17d78c333a85e
+# Source0-md5:	3d722173d84cc705f4aead0679fa2393
 Patch0:		%{name}-link.patch
 Patch1:		%{name}-system-squish.patch
-Patch2:		%{name}-system-dpx.patch
-Patch3:		%{name}-system-libcineon.patch
-Patch4:		ffmpeg4.patch
+Patch2:		%{name}-system-libcineon.patch
+Patch3:		no-clang-format.patch
 URL:		https://sites.google.com/site/openimageio/home
 BuildRequires:	Field3D-devel
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
@@ -39,7 +38,6 @@ BuildRequires:	QtOpenGL-devel
 BuildRequires:	boost-devel >= 1.35
 BuildRequires:	boost-python-devel >= 1.35
 BuildRequires:	cmake >= 2.6
-BuildRequires:	dpx-devel
 BuildRequires:	ffmpeg-devel
 BuildRequires:	giflib-devel
 BuildRequires:	glew-devel >= 1.5.1
@@ -53,10 +51,12 @@ BuildRequires:	libraw-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libwebp-devel
-BuildRequires:	openjpeg-devel
+BuildRequires:	openjpeg2-devel
 BuildRequires:	ptex-devel >= 2.1
 BuildRequires:	pugixml-devel
 BuildRequires:	python-devel >= 1:2.6
+BuildRequires:	python-pybind11
+BuildRequires:	robin-map-devel
 BuildRequires:	squish-devel >= 1.10
 %{?with_tbb:BuildRequires:	tbb-devel}
 BuildRequires:	txt2man
@@ -339,12 +339,11 @@ Python binding for OpenImageIO library.
 Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
-%setup -q -n %{name}-oiio-6950fb8
+%setup -q -n %{name}-oiio-7f79c70
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 %{__rm} -r src/dds.imageio/squish
 # when using system pugixml, don't use hacked headers
@@ -353,19 +352,20 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %build
 install -d build
 cd build
-CXXFLAGS="%{rpmcxxflags} -std=c++11" \
 %cmake ../ \
 %ifarch i386 i486
 	-DNOTHREADS=1 \
 %endif
 	-DEMBEDPLUGINS=OFF \
-	-DOPENJPEG_INCLUDE_DIR=%{_includedir}/openjpeg-1.5 \
+	-DOPENJPEG_INCLUDE_DIR=%{_includedir}/openjpeg-2.3 \
 	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
 	-DLIB_INSTALL_DIR:PATH=%{_libdir} \
 	-DPYLIB_INSTALL_DIR=%{py_sitedir} \
 	-DPYTHON_VERSION=%{py_ver} \
 	-DUSE_EXTERNAL_PUGIXML=ON \
 	-DSTOP_ON_WARNING=OFF \
+	-DPYBIND11_HOME:PATH=%{py_incdir} \
+	-DCMAKE_INSTALL_MANDIR=%{_mandir}/man1 \
 	%{!?with_ocio:-DUSE_OCIO=OFF} \
 	%{!?with_tbb:-DUSE_TBB=OFF}
 
@@ -379,9 +379,10 @@ rm -rf $RPM_BUILD_ROOT
 
 # name clash with iv
 %{__mv} $RPM_BUILD_ROOT%{_bindir}/{iv,oiiv}
+%{__mv} $RPM_BUILD_ROOT%{_mandir}/man1/{iv,oiiv}.1
 
 # installed as %doc
-%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/OpenImageIO
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -391,7 +392,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGES.md CREDITS.md LICENSE README.md
+%doc CHANGES.md CREDITS.md LICENSE.md README.md
 %attr(755,root,root) %{_bindir}/iconvert
 %attr(755,root,root) %{_bindir}/idiff
 %attr(755,root,root) %{_bindir}/igrep
@@ -399,9 +400,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/maketx
 %attr(755,root,root) %{_bindir}/oiiotool
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.1.7
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.2.0
 %attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.1.7
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.2.0
 %attr(755,root,root) %{_libdir}/bmp.imageio.so
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
@@ -413,6 +414,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/softimage.imageio.so
 %attr(755,root,root) %{_libdir}/targa.imageio.so
 %attr(755,root,root) %{_libdir}/zfile.imageio.so
+%attr(755,root,root) %{_libdir}/dicom.imageio.so
+%attr(755,root,root) %{_libdir}/null.imageio.so
 %{_mandir}/man1/iconvert.1*
 %{_mandir}/man1/idiff.1*
 %{_mandir}/man1/igrep.1*
@@ -425,6 +428,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so
 %attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so
 %{_includedir}/OpenImageIO
+%{_pkgconfigdir}/OpenImageIO.pc
+%{_datadir}/cmake/Modules/FindOpenImageIO.cmake
 
 %files plugin-cineon
 %defattr(644,root,root,755)
@@ -497,6 +502,7 @@ rm -rf $RPM_BUILD_ROOT
 %files iv
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/oiiv
+%{_mandir}/man1/oiiv.1*
 
 %files -n python-OpenImageIO
 %defattr(644,root,root,755)

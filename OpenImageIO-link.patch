@@ -1,22 +1,10 @@
---- OpenImageIO-oiio-f4d79c0/src/libOpenImageIO/CMakeLists.txt.orig	2013-07-14 16:40:55.296275085 +0200
-+++ OpenImageIO-oiio-f4d79c0/src/libOpenImageIO/CMakeLists.txt	2013-07-14 17:08:13.526206338 +0200
-@@ -110,7 +110,7 @@
- target_link_libraries (OpenImageIO
-                        ${VISIBILITY_COMMAND} ${VISIBILITY_MAP_COMMAND}
-                        ${format_plugin_libs} # Add all the target link libraries from the plugins
--                       ${Boost_LIBRARIES})
-+                       ${Boost_LIBRARIES} ${CMAKE_DL_LIBS})
- 
- 
- # Include OpenColorIO if using it
 --- OpenImageIO-oiio-4070df8/src/libutil/CMakeLists.txt~	2015-12-19 07:44:03.000000000 +0100
 +++ OpenImageIO-oiio-4070df8/src/libutil/CMakeLists.txt	2015-12-26 10:54:02.944577313 +0100
-@@ -11,7 +11,7 @@
- endif ()
- target_link_libraries (OpenImageIO_Util
-                            ${VISIBILITY_COMMAND} ${VISIBILITY_MAP_COMMAND}
--                           ${Boost_LIBRARIES})
-+			   ${Boost_LIBRARIES} ${CMAKE_DL_LIBS})
- if (WIN32)
+@@ -16,6 +16,7 @@
      target_link_libraries (OpenImageIO_Util psapi.lib)
  endif ()
+ target_link_libraries (OpenImageIO_Util ${ILMBASE_LIBRARIES})
++target_link_libraries (OpenImageIO_Util ${CMAKE_DL_LIBS})
+ 
+ if (VERBOSE)
+     message(STATUS "Setting SOVERSION to: ${SOVERSION}")
