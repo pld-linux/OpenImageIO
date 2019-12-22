@@ -1,8 +1,19 @@
+# TODO:
+# - OpenVDB >= 5.0, Nuke >= 7.0?
+# - package fonts?
+# /usr/share/fonts/OpenImageIO/DroidSans-Bold.ttf
+# /usr/share/fonts/OpenImageIO/DroidSans.ttf
+# /usr/share/fonts/OpenImageIO/DroidSansMono.ttf
+# /usr/share/fonts/OpenImageIO/DroidSerif-Bold.ttf
+# /usr/share/fonts/OpenImageIO/DroidSerif-BoldItalic.ttf
+# /usr/share/fonts/OpenImageIO/DroidSerif-Italic.ttf
+# /usr/share/fonts/OpenImageIO/DroidSerif.ttf
+#
 # to bootstrap: build OpenColorIO --without oiio, build OpenImageIO, rebuild OpenColorIO
 #
 # Conditional build:
 %bcond_without	ocio		# OpenColorIO support in library
-%bcond_without	static_libs	# don't build static libraries
+%bcond_without	opencv		# OpenCV support in library
 %bcond_without	tbb		# Threading Building Blocks
 #
 %ifarch i386 i486
@@ -16,30 +27,34 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	2.0.7
-Release:	5
+Version:	2.0.13
+Release:	1
 License:	BSD
 Group:		Libraries
-Source0:	https://github.com/OpenImageIO/oiio/tarball/Release-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	3d722173d84cc705f4aead0679fa2393
+#Source0Download: https://github.com/OpenImageIO/oiio/releases
+Source0:	https://github.com/OpenImageIO/oiio/archive/Release-%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	76ce4d246409de331ad04453423479bf
 Patch0:		%{name}-link.patch
 Patch1:		%{name}-system-squish.patch
 Patch2:		%{name}-system-libcineon.patch
 Patch3:		no-clang-format.patch
-URL:		https://sites.google.com/site/openimageio/home
+URL:		https://github.com/OpenImageIO/oiio
 BuildRequires:	Field3D-devel
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
-BuildRequires:	OpenEXR-devel >= 1.6.1
+BuildRequires:	OpenEXR-devel >= 2.0
 BuildRequires:	OpenGL-devel
-BuildRequires:	QtCore-devel
-BuildRequires:	QtGui-devel
-BuildRequires:	QtOpenGL-devel
+BuildRequires:	Qt5Core-devel >= 5.0
+BuildRequires:	Qt5Gui-devel >= 5.0
+BuildRequires:	Qt5OpenGL-devel >= 5.0
+BuildRequires:	Qt5Widgets-devel >= 5.0
 # filesystem, regex, system, thread
-BuildRequires:	boost-devel >= 1.35
-BuildRequires:	boost-python-devel >= 1.35
-BuildRequires:	cmake >= 2.6
-BuildRequires:	dcmtk-devel
-BuildRequires:	ffmpeg-devel
+BuildRequires:	boost-devel >= 1.53
+BuildRequires:	boost-python-devel >= 1.53
+BuildRequires:	bzip2-devel
+BuildRequires:	cmake >= 3.2.2
+BuildRequires:	dcmtk-devel >= 3.6.1
+BuildRequires:	ffmpeg-devel >= 2.6
+BuildRequires:	freetype-devel >= 2.0
 BuildRequires:	giflib-devel
 BuildRequires:	glew-devel >= 1.5.1
 BuildRequires:	hdf5-devel
@@ -49,17 +64,18 @@ BuildRequires:	libcineon-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libraw-devel
-BuildRequires:	libstdc++-devel
-BuildRequires:	libtiff-devel
+BuildRequires:	libstdc++-devel >= 6:4.7
+BuildRequires:	libtiff-devel >= 3.9
 BuildRequires:	libwebp-devel
-BuildRequires:	openjpeg2-devel
+%{?with_opencv:BuildRequires:	opencv-devel}
+BuildRequires:	openjpeg2-devel >= 2
 BuildRequires:	ptex-devel >= 2.1
 BuildRequires:	pugixml-devel
-BuildRequires:	python-devel >= 1:2.6
-BuildRequires:	python-pybind11
+BuildRequires:	python-devel >= 1:2.7
+BuildRequires:	python-pybind11 >= 2.2.0
 BuildRequires:	robin-map-devel
 BuildRequires:	squish-devel >= 1.10
-%{?with_tbb:BuildRequires:	tbb-devel}
+%{?with_tbb:BuildRequires:	tbb-devel >= 2017}
 BuildRequires:	txt2man
 BuildRequires:	zlib-devel
 Requires:	ilmbase >= 1.0.1
@@ -92,7 +108,7 @@ Summary:	Header files for OpenImageIO library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki OpenImageIO
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libstdc++-devel
+Requires:	libstdc++-devel >= 6:4.7
 
 %description devel
 Header files for OpenImageIO library.
@@ -117,6 +133,7 @@ Summary:	DICOM plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka DICOM dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	dcmtk >= 3.6.1
 Requires:	squish >= 1.10
 
 %description plugin-dicom
@@ -155,6 +172,7 @@ Summary:	FFmpeg plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka FFmpeg dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	ffmpeg-libs >= 2.6
 
 %description plugin-ffmpeg
 OpenImageIO plugin to read FFmpeg files.
@@ -229,7 +247,7 @@ Summary:	OpenEXR plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka OpenEXR dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	OpenEXR >= 1.6.1
+Requires:	OpenEXR >= 2.0
 
 %description plugin-openexr
 OpenImageIO plugin to read and write OpenEXR files.
@@ -303,6 +321,7 @@ Summary:	TIFF plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka TIFF dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	libtiff >= 3.9
 
 %description plugin-tiff
 OpenImageIO plugin to read and write TIFF files.
@@ -353,7 +372,7 @@ Python binding for OpenImageIO library.
 Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
-%setup -q -n %{name}-oiio-7f79c70
+%setup -q -n oiio-Release-%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -366,21 +385,22 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %build
 install -d build
 cd build
-%cmake ../ \
-%ifarch i386 i486
-	-DNOTHREADS=1 \
-%endif
+%cmake .. \
+	-DCMAKE_INSTALL_MANDIR=%{_mandir}/man1 \
 	-DEMBEDPLUGINS=OFF \
 	-DOPENJPEG_INCLUDE_DIR=%{_includedir}/openjpeg-2.3 \
 	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
 	-DLIB_INSTALL_DIR:PATH=%{_libdir} \
+%ifarch i386 i486
+	-DNOTHREADS=1 \
+%endif
+	-DPYBIND11_HOME:PATH=%{py_incdir} \
 	-DPYLIB_INSTALL_DIR=%{py_sitedir} \
 	-DPYTHON_VERSION=%{py_ver} \
 	-DUSE_EXTERNAL_PUGIXML=ON \
 	-DSTOP_ON_WARNING=OFF \
-	-DPYBIND11_HOME:PATH=%{py_incdir} \
-	-DCMAKE_INSTALL_MANDIR=%{_mandir}/man1 \
 	%{!?with_ocio:-DUSE_OCIO=OFF} \
+	%{!?with_opencv:-DUSE_OPENCV=OFF} \
 	%{!?with_tbb:-DUSE_TBB=OFF}
 
 %{__make}
