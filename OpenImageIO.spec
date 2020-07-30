@@ -1,5 +1,6 @@
 # TODO:
-# - OpenVDB >= 5.0, Nuke >= 7.0?
+# - OpenVDB >= 5.0  https://www.openvdb.org/
+# - Nuke >= 7.0?  https://www.foundry.com/products/nuke/ (proprietary)
 # - package fonts?
 # /usr/share/fonts/OpenImageIO/DroidSans-Bold.ttf
 # /usr/share/fonts/OpenImageIO/DroidSans.ttf
@@ -43,10 +44,10 @@ BuildRequires:	Field3D-devel
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
 BuildRequires:	OpenEXR-devel >= 2.0
 BuildRequires:	OpenGL-devel
-BuildRequires:	Qt5Core-devel >= 5.0
-BuildRequires:	Qt5Gui-devel >= 5.0
-BuildRequires:	Qt5OpenGL-devel >= 5.0
-BuildRequires:	Qt5Widgets-devel >= 5.0
+BuildRequires:	Qt5Core-devel >= 5.6
+BuildRequires:	Qt5Gui-devel >= 5.6
+BuildRequires:	Qt5OpenGL-devel >= 5.6
+BuildRequires:	Qt5Widgets-devel >= 5.6
 # filesystem, regex, system, thread
 BuildRequires:	boost-devel >= 1.53
 BuildRequires:	boost-python-devel >= 1.53
@@ -63,11 +64,11 @@ BuildRequires:	jasper-devel
 BuildRequires:	libcineon-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
-BuildRequires:	libraw-devel
+BuildRequires:	libraw-devel >= 0.18
 BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	libtiff-devel >= 3.9
 BuildRequires:	libwebp-devel
-%{?with_opencv:BuildRequires:	opencv-devel}
+%{?with_opencv:BuildRequires:	opencv-devel >= 2.0}
 BuildRequires:	openjpeg2-devel >= 2
 BuildRequires:	ptex-devel >= 2.1
 BuildRequires:	pugixml-devel
@@ -75,7 +76,7 @@ BuildRequires:	python-devel >= 1:2.7
 BuildRequires:	python-pybind11 >= 2.2.0
 BuildRequires:	robin-map-devel
 BuildRequires:	squish-devel >= 1.10
-%{?with_tbb:BuildRequires:	tbb-devel >= 2017}
+%{?with_tbb:BuildRequires:	tbb-devel >= 2018}
 BuildRequires:	txt2man
 BuildRequires:	zlib-devel
 Requires:	ilmbase >= 1.0.1
@@ -297,6 +298,7 @@ Summary:	RAW plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka RAW dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	libraw >= 0.18
 
 %description plugin-raw
 OpenImageIO plugin to readTRAW files.
@@ -333,7 +335,7 @@ Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki TIFF.
 Summary:	Programmer documentation for OpenImageIO library
 Summary(pl.UTF-8):	Dokumentacja programisty do biblioteki OpenImageIO
 Group:		Documentation
-%if "%{_rpmversion}" >= "5"
+%if "%{_rpmversion}" >= "4.6"
 BuildArch:	noarch
 %endif
 
@@ -348,6 +350,10 @@ Summary:	Qt/OpenImageIO-based Image Viewer
 Summary(pl.UTF-8):	Przeglądarka obrazków (IV) oparta o Qt i OpenImageIO
 Group:		X11/Applications/Graphics
 Requires:	%{name} = %{version}-%{release}
+Requires:	Qt5Core >= 5.6
+Requires:	Qt5Gui >= 5.6
+Requires:	Qt5OpenGL >= 5.6
+Requires:	Qt5Widgets >= 5.6
 Requires:	glew >= 1.5.1
 
 %description iv
