@@ -335,9 +335,7 @@ Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki TIFF.
 Summary:	Programmer documentation for OpenImageIO library
 Summary(pl.UTF-8):	Dokumentacja programisty do biblioteki OpenImageIO
 Group:		Documentation
-%if "%{_rpmversion}" >= "4.6"
 BuildArch:	noarch
-%endif
 
 %description apidocs
 Programmer documentation for OpenImageIO library.
