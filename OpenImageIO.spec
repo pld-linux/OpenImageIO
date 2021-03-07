@@ -69,7 +69,7 @@ BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	libtiff-devel >= 3.9
 BuildRequires:	libwebp-devel
 %{?with_opencv:BuildRequires:	opencv-devel >= 2.0}
-BuildRequires:	openjpeg2-devel >= 2
+BuildRequires:	openjpeg2-devel >= 2.4
 BuildRequires:	ptex-devel >= 2.1
 BuildRequires:	pugixml-devel
 BuildRequires:	python-devel >= 1:2.7
@@ -392,7 +392,7 @@ cd build
 %cmake .. \
 	-DCMAKE_INSTALL_MANDIR=%{_mandir}/man1 \
 	-DEMBEDPLUGINS=OFF \
-	-DOPENJPEG_INCLUDE_DIR=%{_includedir}/openjpeg-2.3 \
+	-DOPENJPEG_INCLUDE_DIR=%{_includedir}/openjpeg-2.4 \
 	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
 	-DLIB_INSTALL_DIR:PATH=%{_libdir} \
 %ifarch i386 i486
