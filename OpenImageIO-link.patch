@@ -1,6 +1,7 @@
---- OpenImageIO-oiio-4070df8/src/libutil/CMakeLists.txt~	2015-12-19 07:44:03.000000000 +0100
-+++ OpenImageIO-oiio-4070df8/src/libutil/CMakeLists.txt	2015-12-26 10:54:02.944577313 +0100
-@@ -16,6 +16,7 @@
+diff -urNp -x '*.orig' oiio-Release-2.0.13.org/src/libutil/CMakeLists.txt oiio-Release-2.0.13/src/libutil/CMakeLists.txt
+--- oiio-Release-2.0.13.org/src/libutil/CMakeLists.txt	2019-12-03 23:28:14.000000000 +0100
++++ oiio-Release-2.0.13/src/libutil/CMakeLists.txt	2021-03-07 10:21:58.680334785 +0100
+@@ -16,6 +16,7 @@ if (WIN32)
      target_link_libraries (OpenImageIO_Util psapi.lib)
  endif ()
  target_link_libraries (OpenImageIO_Util ${ILMBASE_LIBRARIES})

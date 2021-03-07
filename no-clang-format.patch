@@ -1,6 +1,7 @@
---- OpenImageIO-oiio-7f79c70/src/cmake/compiler.cmake~	2019-04-01 07:28:42.000000000 +0200
-+++ OpenImageIO-oiio-7f79c70/src/cmake/compiler.cmake	2019-04-21 11:32:25.692670361 +0200
-@@ -338,32 +338,6 @@
+diff -urNp -x '*.orig' oiio-Release-2.0.13.org/src/cmake/compiler.cmake oiio-Release-2.0.13/src/cmake/compiler.cmake
+--- oiio-Release-2.0.13.org/src/cmake/compiler.cmake	2019-12-03 23:28:14.000000000 +0100
++++ oiio-Release-2.0.13/src/cmake/compiler.cmake	2021-03-07 10:22:00.460540342 +0100
+@@ -338,32 +338,6 @@ if (CLANG_TIDY)
      # Hint: run with CLANG_TIDY_ARGS=-list-checks to list all the checks
  endif ()
  
