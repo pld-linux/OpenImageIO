@@ -1,0 +1,100 @@
+From 571c8dd95c455804d9ede351d53b3eea8d47564b Mon Sep 17 00:00:00 2001
+From: Larry Gritz <lg@larrygritz.com>
+Date: Fri, 3 Apr 2020 09:47:07 -0700
+Subject: [PATCH] Protect against double definitions of GPSTAG values. (#2539)
+
+Prerelease snapshots of libtiff now define these in tiff.h.
+---
+ src/libOpenImageIO/exif.cpp | 70 ++++++++++++++++++++-----------------
+ 1 file changed, 37 insertions(+), 33 deletions(-)
+
+diff --git a/src/libOpenImageIO/exif.cpp b/src/libOpenImageIO/exif.cpp
+index d997f4c16e..51cb9ef911 100644
+--- a/src/libOpenImageIO/exif.cpp
++++ b/src/libOpenImageIO/exif.cpp
+@@ -528,40 +528,44 @@ pvt::exif_tagmap_ref()
+ 
+ 
+ 
++// libtiff > 4.1.0 defines these in tiff.h. For older libtiff, let's define
++// them ourselves.
++#ifndef GPSTAG_VERSIONID
+ enum GPSTag {
+-    GPSTAG_VERSIONID         = 0,
+-    GPSTAG_LATITUDEREF       = 1,
+-    GPSTAG_LATITUDE          = 2,
+-    GPSTAG_LONGITUDEREF      = 3,
+-    GPSTAG_LONGITUDE         = 4,
+-    GPSTAG_ALTITUDEREF       = 5,
+-    GPSTAG_ALTITUDE          = 6,
+-    GPSTAG_TIMESTAMP         = 7,
+-    GPSTAG_SATELLITES        = 8,
+-    GPSTAG_STATUS            = 9,
+-    GPSTAG_MEASUREMODE       = 10,
+-    GPSTAG_DOP               = 11,
+-    GPSTAG_SPEEDREF          = 12,
+-    GPSTAG_SPEED             = 13,
+-    GPSTAG_TRACKREF          = 14,
+-    GPSTAG_TRACK             = 15,
+-    GPSTAG_IMGDIRECTIONREF   = 16,
+-    GPSTAG_IMGDIRECTION      = 17,
+-    GPSTAG_MAPDATUM          = 18,
+-    GPSTAG_DESTLATITUDEREF   = 19,
+-    GPSTAG_DESTLATITUDE      = 20,
+-    GPSTAG_DESTLONGITUDEREF  = 21,
+-    GPSTAG_DESTLONGITUDE     = 22,
+-    GPSTAG_DESTBEARINGREF    = 23,
+-    GPSTAG_DESTBEARING       = 24,
+-    GPSTAG_DESTDISTANCEREF   = 25,
+-    GPSTAG_DESTDISTANCE      = 26,
+-    GPSTAG_PROCESSINGMETHOD  = 27,
+-    GPSTAG_AREAINFORMATION   = 28,
+-    GPSTAG_DATESTAMP         = 29,
+-    GPSTAG_DIFFERENTIAL      = 30,
+-    GPSTAG_HPOSITIONINGERROR = 31
++    GPSTAG_VERSIONID            = 0,
++    GPSTAG_LATITUDEREF          = 1,
++    GPSTAG_LATITUDE             = 2,
++    GPSTAG_LONGITUDEREF         = 3,
++    GPSTAG_LONGITUDE            = 4,
++    GPSTAG_ALTITUDEREF          = 5,
++    GPSTAG_ALTITUDE             = 6,
++    GPSTAG_TIMESTAMP            = 7,
++    GPSTAG_SATELLITES           = 8,
++    GPSTAG_STATUS               = 9,
++    GPSTAG_MEASUREMODE          = 10,
++    GPSTAG_DOP                  = 11,
++    GPSTAG_SPEEDREF             = 12,
++    GPSTAG_SPEED                = 13,
++    GPSTAG_TRACKREF             = 14,
++    GPSTAG_TRACK                = 15,
++    GPSTAG_IMGDIRECTIONREF      = 16,
++    GPSTAG_IMGDIRECTION         = 17,
++    GPSTAG_MAPDATUM             = 18,
++    GPSTAG_DESTLATITUDEREF      = 19,
++    GPSTAG_DESTLATITUDE         = 20,
++    GPSTAG_DESTLONGITUDEREF     = 21,
++    GPSTAG_DESTLONGITUDE        = 22,
++    GPSTAG_DESTBEARINGREF       = 23,
++    GPSTAG_DESTBEARING          = 24,
++    GPSTAG_DESTDISTANCEREF      = 25,
++    GPSTAG_DESTDISTANCE         = 26,
++    GPSTAG_PROCESSINGMETHOD     = 27,
++    GPSTAG_AREAINFORMATION      = 28,
++    GPSTAG_DATESTAMP            = 29,
++    GPSTAG_DIFFERENTIAL         = 30,
++    GPSTAG_GPSHPOSITIONINGERROR = 31
+ };
++#endif
+ 
+ static const TagInfo gps_tag_table[] = {
+     // clang-format off
+@@ -596,7 +600,7 @@ static const TagInfo gps_tag_table[] = {
+     { GPSTAG_AREAINFORMATION,	"GPS:AreaInformation",	TIFF_UNDEFINED, 1 },
+     { GPSTAG_DATESTAMP,		"GPS:DateStamp",	TIFF_ASCII, 0 },
+     { GPSTAG_DIFFERENTIAL,	"GPS:Differential",	TIFF_SHORT, 1 },
+-    { GPSTAG_HPOSITIONINGERROR,	"GPS:HPositioningError",TIFF_RATIONAL, 1 }
++    { GPSTAG_GPSHPOSITIONINGERROR,	"GPS:HPositioningError",TIFF_RATIONAL, 1 }
+     // clang-format on
+ };
+ 
