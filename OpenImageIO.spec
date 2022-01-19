@@ -76,6 +76,7 @@ BuildRequires:	pugixml-devel
 BuildRequires:	python-devel >= 1:2.7
 BuildRequires:	python-pybind11 >= 2.2.0
 BuildRequires:	robin-map-devel
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	squish-devel >= 1.10
 %{?with_tbb:BuildRequires:	tbb-devel >= 2018}
