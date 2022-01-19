@@ -15,7 +15,7 @@
 # Conditional build:
 %bcond_without	ocio		# OpenColorIO support in library
 %bcond_without	opencv		# OpenCV support in library
-%bcond_without	tbb		# Threading Building Blocks
+%bcond_with	tbb		# Threading Building Blocks
 #
 %ifarch i386 i486
 # https://github.com/OpenImageIO/oiio/issues/583
