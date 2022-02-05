@@ -3,19 +3,19 @@ diff -urNp -x '*.orig' oiio-Release-2.0.13.org/src/cineon.imageio/CMakeLists.txt
 +++ oiio-Release-2.0.13/src/cineon.imageio/CMakeLists.txt	2021-03-07 10:21:59.867138452 +0100
 @@ -1,4 +1,2 @@
  add_oiio_plugin (cineoninput.cpp
--  libcineon/Cineon.cpp libcineon/OutStream.cpp libcineon/Codec.cpp libcineon/Reader.cpp
--  libcineon/Writer.cpp libcineon/CineonHeader.cpp libcineon/ElementReadStream.cpp
--  libcineon/InStream.cpp)
-+  LINK_LIBRARIES cineon)
+-                 libcineon/Cineon.cpp libcineon/OutStream.cpp libcineon/Codec.cpp
+-                 libcineon/Reader.cpp libcineon/Writer.cpp libcineon/CineonHeader.cpp
+-                 libcineon/ElementReadStream.cpp libcineon/InStream.cpp)
++                 LINK_LIBRARIES cineon)
 diff -urNp -x '*.orig' oiio-Release-2.0.13.org/src/cineon.imageio/cineoninput.cpp oiio-Release-2.0.13/src/cineon.imageio/cineoninput.cpp
 --- oiio-Release-2.0.13.org/src/cineon.imageio/cineoninput.cpp	2019-12-03 23:28:14.000000000 +0100
 +++ oiio-Release-2.0.13/src/cineon.imageio/cineoninput.cpp	2021-03-07 10:21:59.867138452 +0100
 @@ -28,7 +28,7 @@
-   (This is the Modified BSD License)
- */
+ 
+ #include <cmath>
  
 -#include "libcineon/Cineon.h"
 +#include <Cineon.h>
  
  #include <OpenImageIO/dassert.h>
- #include <OpenImageIO/fmath.h>
+ #include <OpenImageIO/imageio.h>

@@ -28,18 +28,15 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	2.0.13
-Release:	6
+Version:	2.3.12.0
+Release:	0.1
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/OpenImageIO/oiio/releases
-Source0:	https://github.com/OpenImageIO/oiio/archive/Release-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	76ce4d246409de331ad04453423479bf
-Patch0:		%{name}-link.patch
-Patch1:		%{name}-system-squish.patch
+Source0:	https://github.com/OpenImageIO/oiio/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	e109c5a4e6844f1f58c91ec7a991dbd7
 Patch2:		%{name}-system-libcineon.patch
 Patch3:		no-clang-format.patch
-Patch4:		tiff_defines.patch
 URL:		https://github.com/OpenImageIO/oiio
 BuildRequires:	Field3D-devel
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
@@ -379,16 +376,11 @@ Python binding for OpenImageIO library.
 Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
-%setup -q -n oiio-Release-%{version}
-%patch0 -p1
-%patch1 -p1
+%setup -q -n oiio-%{version}
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 %{__rm} -r src/dds.imageio/squish
-# when using system pugixml, don't use hacked headers
-%{__rm} src/include/OpenImageIO/pugi*.{c,h}pp
 
 %build
 install -d build
