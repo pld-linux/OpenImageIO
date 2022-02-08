@@ -29,7 +29,7 @@ Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
 Version:	2.3.12.0
-Release:	0.1
+Release:	1
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/OpenImageIO/oiio/releases
@@ -60,6 +60,7 @@ BuildRequires:	hdf5-devel
 BuildRequires:	ilmbase-devel >= 1.0.1
 BuildRequires:	jasper-devel
 BuildRequires:	libcineon-devel
+BuildRequires:	libheif-devel
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libraw-devel >= 0.18
@@ -205,6 +206,18 @@ OpenImageIO plugin to read GIF files.
 %description plugin-gif -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca pliki GIF.
 
+%package plugin-heif
+Summary:	HEIF plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka HEIF dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-heif
+OpenImageIO plugin to read HEIF files.
+
+%description plugin-heif -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca pliki HEIF.
+
 %package plugin-ico
 Summary:	ICO plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka ICO dla biblioteki OpenImageIO
@@ -331,18 +344,6 @@ OpenImageIO plugin to read and write TIFF files.
 %description plugin-tiff -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki TIFF.
 
-%package apidocs
-Summary:	Programmer documentation for OpenImageIO library
-Summary(pl.UTF-8):	Dokumentacja programisty do biblioteki OpenImageIO
-Group:		Documentation
-BuildArch:	noarch
-
-%description apidocs
-Programmer documentation for OpenImageIO library.
-
-%description apidocs -l pl.UTF-8
-Dokumentacja programisty do biblioteki OpenImageIO.
-
 %package iv
 Summary:	Qt/OpenImageIO-based Image Viewer
 Summary(pl.UTF-8):	Przeglądarka obrazków (IV) oparta o Qt i OpenImageIO
@@ -395,6 +396,7 @@ cd build
 %ifarch i386 i486
 	-DNOTHREADS=1 \
 %endif
+	-DENABLE_FIELD3D=ON \
 	-DPYBIND11_HOME:PATH=%{py_incdir} \
 	-DPYLIB_INSTALL_DIR=%{py_sitedir} \
 	-DPYTHON_VERSION=%{py_ver} \
@@ -450,6 +452,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/targa.imageio.so
 %attr(755,root,root) %{_libdir}/zfile.imageio.so
 %attr(755,root,root) %{_libdir}/null.imageio.so
+%attr(755,root,root) %{_libdir}/term.imageio.so
 %{_mandir}/man1/iconvert.1*
 %{_mandir}/man1/idiff.1*
 %{_mandir}/man1/igrep.1*
@@ -493,6 +496,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gif.imageio.so
 
+%files plugin-heif
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/heif.imageio.so
+
 %files plugin-ico
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/ico.imageio.so
@@ -532,10 +539,6 @@ rm -rf $RPM_BUILD_ROOT
 %files plugin-webp
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/webp.imageio.so
-
-%files apidocs
-%defattr(644,root,root,755)
-%doc src/doc/openimageio.pdf
 
 %files iv
 %defattr(644,root,root,755)
