@@ -29,7 +29,7 @@ Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
 Version:	2.3.12.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/OpenImageIO/oiio/releases
@@ -40,7 +40,7 @@ Patch3:		no-clang-format.patch
 URL:		https://github.com/OpenImageIO/oiio
 BuildRequires:	Field3D-devel
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
-BuildRequires:	OpenEXR-devel >= 2.0
+BuildRequires:	OpenEXR-devel >= 3.0.0
 BuildRequires:	OpenGL-devel
 BuildRequires:	Qt5Core-devel >= 5.6
 BuildRequires:	Qt5Gui-devel >= 5.6
@@ -57,7 +57,6 @@ BuildRequires:	freetype-devel >= 2.0
 BuildRequires:	giflib-devel
 BuildRequires:	glew-devel >= 1.5.1
 BuildRequires:	hdf5-devel
-BuildRequires:	ilmbase-devel >= 1.0.1
 BuildRequires:	jasper-devel
 BuildRequires:	libcineon-devel
 BuildRequires:	libheif-devel
@@ -80,7 +79,7 @@ BuildRequires:	squish-devel >= 1.10
 %{?with_tbb:BuildRequires:	tbb-devel >= 2018}
 BuildRequires:	txt2man
 BuildRequires:	zlib-devel
-Requires:	ilmbase >= 1.0.1
+Requires:	OpenEXR >= 3.0.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
