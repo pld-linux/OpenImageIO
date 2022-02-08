@@ -391,6 +391,7 @@ cd build
 	-DOPENJPEG_INCLUDE_DIR=%{_includedir}/openjpeg-2.4 \
 	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
 	-DLIB_INSTALL_DIR:PATH=%{_libdir} \
+	-DBUILD_TESTING=OFF \
 %ifarch i386 i486
 	-DNOTHREADS=1 \
 %endif
@@ -434,9 +435,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/maketx
 %attr(755,root,root) %{_bindir}/oiiotool
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.2.0
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.2.3
 %attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.2.0
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.2.3
 %attr(755,root,root) %{_libdir}/bmp.imageio.so
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
@@ -462,7 +463,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so
 %{_includedir}/OpenImageIO
 %{_pkgconfigdir}/OpenImageIO.pc
-%{_datadir}/cmake/Modules/FindOpenImageIO.cmake
+%{_libdir}/cmake/OpenImageIO
 
 %files plugin-cineon
 %defattr(644,root,root,755)
