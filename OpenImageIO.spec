@@ -48,7 +48,7 @@ BuildRequires:	Qt5OpenGL-devel >= 5.6
 BuildRequires:	Qt5Widgets-devel >= 5.6
 # filesystem, regex, system, thread
 BuildRequires:	boost-devel >= 1.53
-BuildRequires:	boost-python-devel >= 1.53
+BuildRequires:	boost-python3-devel >= 1.53
 BuildRequires:	bzip2-devel
 BuildRequires:	cmake >= 3.2.2
 BuildRequires:	dcmtk-devel >= 3.6.1
@@ -70,8 +70,8 @@ BuildRequires:	libwebp-devel
 BuildRequires:	openjpeg2-devel >= 2.4
 BuildRequires:	ptex-devel >= 2.1
 BuildRequires:	pugixml-devel
-BuildRequires:	python-devel >= 1:2.7
-BuildRequires:	python-pybind11 >= 2.2.0
+BuildRequires:	python3-devel >= 1:2.7
+BuildRequires:	python3-pybind11 >= 2.2.0
 BuildRequires:	robin-map-devel
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.605
@@ -363,16 +363,16 @@ IV to przeglądarka obrazków oparta na wtyczkach ImageIO; dzięki temu
 jest w stanie odczytać obrazy w dowolnym formacie, dla którego
 istnieje właściwa wtyczka.
 
-%package -n python-OpenImageIO
+%package -n python3-OpenImageIO
 Summary:	Python binding for OpenImageIO library
 Summary(pl.UTF-8):	Wiązanie Pythona do biblioteki OpenImageIO
 Group:		Libraries/Python
 Requires:	%{name} = %{version}-%{release}
 
-%description -n python-OpenImageIO
+%description -n python3-OpenImageIO
 Python binding for OpenImageIO library.
 
-%description -n python-OpenImageIO -l pl.UTF-8
+%description -n python3-OpenImageIO -l pl.UTF-8
 Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
@@ -398,7 +398,7 @@ cd build
 	-DENABLE_FIELD3D=ON \
 	-DPYBIND11_HOME:PATH=%{py_incdir} \
 	-DPYLIB_INSTALL_DIR=%{py_sitedir} \
-	-DPYTHON_VERSION=%{py_ver} \
+	-DPYTHON_VERSION=%{py3_ver} \
 	-DUSE_EXTERNAL_PUGIXML=ON \
 	-DSTOP_ON_WARNING=OFF \
 	%{!?with_ocio:-DUSE_OCIO=OFF} \
@@ -544,6 +544,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/oiiv
 %{_mandir}/man1/oiiv.1*
 
-%files -n python-OpenImageIO
+%files -n python3-OpenImageIO
 %defattr(644,root,root,755)
 %attr(755,root,root) %{py_sitedir}/OpenImageIO.so
