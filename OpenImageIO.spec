@@ -28,13 +28,13 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	2.3.12.0
-Release:	6
+Version:	2.3.21.0
+Release:	1
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/OpenImageIO/oiio/releases
 Source0:	https://github.com/OpenImageIO/oiio/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	e109c5a4e6844f1f58c91ec7a991dbd7
+# Source0-md5:	a5def3fc51a35b09f251bc32a11c24da
 Patch2:		%{name}-system-libcineon.patch
 Patch3:		no-clang-format.patch
 URL:		https://github.com/OpenImageIO/oiio
@@ -50,7 +50,7 @@ BuildRequires:	Qt5Widgets-devel >= 5.6
 BuildRequires:	boost-devel >= 1.53
 BuildRequires:	boost-python3-devel >= 1.53
 BuildRequires:	bzip2-devel
-BuildRequires:	cmake >= 3.2.2
+BuildRequires:	cmake >= 3.12
 BuildRequires:	dcmtk-devel >= 3.6.1
 BuildRequires:	ffmpeg-devel >= 2.6
 BuildRequires:	freetype-devel >= 2.0
@@ -546,4 +546,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n python3-OpenImageIO
 %defattr(644,root,root,755)
-%attr(755,root,root) %{py3_sitedir}/OpenImageIO*.so
+%dir %{py3_sitedir}/OpenImageIO
+%attr(755,root,root) %{py3_sitedir}/OpenImageIO/OpenImageIO*.so
+%{py3_sitedir}/OpenImageIO/__init__.py
