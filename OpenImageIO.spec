@@ -388,7 +388,6 @@ cd build
 %cmake .. \
 	-DCMAKE_INSTALL_MANDIR=%{_mandir}/man1 \
 	-DEMBEDPLUGINS=OFF \
-	-DOPENJPEG_INCLUDE_DIR=%{_includedir}/openjpeg-2.4 \
 	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
 	-DLIB_INSTALL_DIR:PATH=%{_libdir} \
 	-DBUILD_TESTING=OFF \
