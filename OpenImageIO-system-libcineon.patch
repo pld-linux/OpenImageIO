@@ -1,16 +1,19 @@
-diff -urNp -x '*.orig' oiio-Release-2.0.13.org/src/cineon.imageio/CMakeLists.txt oiio-Release-2.0.13/src/cineon.imageio/CMakeLists.txt
---- oiio-Release-2.0.13.org/src/cineon.imageio/CMakeLists.txt	2019-12-03 23:28:14.000000000 +0100
-+++ oiio-Release-2.0.13/src/cineon.imageio/CMakeLists.txt	2021-03-07 10:21:59.867138452 +0100
-@@ -1,4 +1,2 @@
+--- oiio-2.4.14.0/src/cineon.imageio/CMakeLists.txt.orig	2023-08-21 21:11:54.336404839 +0200
++++ oiio-2.4.14.0/src/cineon.imageio/CMakeLists.txt	2023-08-21 21:26:52.004875084 +0200
+@@ -3,9 +3,7 @@
+ # https://github.com/OpenImageIO/oiio
+ 
  add_oiio_plugin (cineoninput.cpp
 -                 libcineon/Cineon.cpp libcineon/OutStream.cpp libcineon/Codec.cpp
--                 libcineon/Reader.cpp libcineon/Writer.cpp libcineon/CineonHeader.cpp
+-                 libcineon/Reader.cpp libcineon/CineonHeader.cpp
 -                 libcineon/ElementReadStream.cpp libcineon/InStream.cpp)
 +                 LINK_LIBRARIES cineon)
-diff -urNp -x '*.orig' oiio-Release-2.0.13.org/src/cineon.imageio/cineoninput.cpp oiio-Release-2.0.13/src/cineon.imageio/cineoninput.cpp
---- oiio-Release-2.0.13.org/src/cineon.imageio/cineoninput.cpp	2019-12-03 23:28:14.000000000 +0100
-+++ oiio-Release-2.0.13/src/cineon.imageio/cineoninput.cpp	2021-03-07 10:21:59.867138452 +0100
-@@ -28,7 +28,7 @@
+ 
+ # Note: OIIO doesn't support cineon output, so we don't compile
+ # libcineon/Writer.cpp
+--- oiio-2.4.14.0/src/cineon.imageio/cineoninput.cpp.orig	2023-08-01 22:15:24.000000000 +0200
++++ oiio-2.4.14.0/src/cineon.imageio/cineoninput.cpp	2023-08-22 17:46:26.265122755 +0200
+@@ -4,7 +4,7 @@
  
  #include <cmath>
  
@@ -19,3 +22,14 @@ diff -urNp -x '*.orig' oiio-Release-2.0.13.org/src/cineon.imageio/cineoninput.cp
  
  #include <OpenImageIO/dassert.h>
  #include <OpenImageIO/imageio.h>
+@@ -337,8 +337,8 @@ CineonInput::open(const std::string& nam
+         // FIXME: do something about the time zone
+     }
+     {
+-        char filmedge[17];
+-        m_cin.header.FilmEdgeCode(filmedge, sizeof(filmedge));
++        char filmedge[3+3+3+10+10+1]; // should be 17 (2+2+2+6+4+NUL), but be safe in case of out-of-range values
++        m_cin.header.FilmEdgeCode(filmedge);
+         if (filmedge[0])
+             m_spec.attribute("cineon:FilmEdgeCode", filmedge);
+     }

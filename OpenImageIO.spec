@@ -1,6 +1,6 @@
 # TODO:
-# - OpenVDB >= 5.0  https://www.openvdb.org/
 # - Nuke >= 7.0?  https://www.foundry.com/products/nuke/ (proprietary)
+# - R3DSDK? https://www.red.com/downloads/r3d-sdk (proprietary)
 # - package fonts?
 # /usr/share/fonts/OpenImageIO/DroidSans-Bold.ttf
 # /usr/share/fonts/OpenImageIO/DroidSans.ttf
@@ -15,64 +15,78 @@
 # Conditional build:
 %bcond_without	ocio		# OpenColorIO support in library
 %bcond_without	opencv		# OpenCV support in library
-%bcond_with	tbb		# Threading Building Blocks
+%bcond_without	openvdb		# OpenVDB plugin
+%bcond_with	qt6		# Qt6 instead of Qt5
+%bcond_without	tbb		# Threading Building Blocks
 #
 %ifarch i386 i486
 # https://github.com/OpenImageIO/oiio/issues/583
 %undefine	with_tbb
 %endif
-%ifnarch %{ix86} %{x8664} %{arm} ia64 ppc ppc64
+%ifnarch %{ix86} %{x8664} %{arm} aarch64 ia64 ppc ppc64
 %undefine	with_tbb
+%endif
+%if %{without tbb}
+%undefine	with_openvdb
 %endif
 #
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	2.3.21.0
-Release:	7
-License:	BSD
+Version:	2.4.14.0
+Release:	1
+License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/OpenImageIO/oiio/releases
 Source0:	https://github.com/OpenImageIO/oiio/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	a5def3fc51a35b09f251bc32a11c24da
+# Source0-md5:	cc0e320302622783dfe16ac6ae1946b3
 Patch2:		%{name}-system-libcineon.patch
 Patch3:		no-clang-format.patch
 URL:		https://github.com/OpenImageIO/oiio
-BuildRequires:	Field3D-devel
+BuildRequires:	Imath-devel >= 3.0.0
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
 BuildRequires:	OpenEXR-devel >= 3.0.0
 BuildRequires:	OpenGL-devel
+%if %{with qt6}
+BuildRequires:	Qt6Core-devel >= 6
+BuildRequires:	Qt6Gui-devel >= 6
+BuildRequires:	Qt6OpenGLWidgets-devel >= 6
+BuildRequires:	Qt6Widgets-devel >= 6
+%else
 BuildRequires:	Qt5Core-devel >= 5.6
 BuildRequires:	Qt5Gui-devel >= 5.6
 BuildRequires:	Qt5OpenGL-devel >= 5.6
 BuildRequires:	Qt5Widgets-devel >= 5.6
+%endif
 # filesystem, regex, system, thread
-BuildRequires:	boost-devel >= 1.53
-BuildRequires:	boost-python3-devel >= 1.53
+BuildRequires:	boost-devel >= 1.66
+BuildRequires:	boost-python3-devel >= 1.66
 BuildRequires:	bzip2-devel
 BuildRequires:	cmake >= 3.12
 BuildRequires:	dcmtk-devel >= 3.6.1
-BuildRequires:	ffmpeg-devel >= 2.6
+BuildRequires:	ffmpeg-devel >= 3.0
 BuildRequires:	freetype-devel >= 2.0
-BuildRequires:	giflib-devel
+BuildRequires:	giflib-devel >= 5.0
 BuildRequires:	glew-devel >= 1.5.1
 BuildRequires:	hdf5-devel
 BuildRequires:	jasper-devel
 BuildRequires:	libcineon-devel
-BuildRequires:	libheif-devel
+BuildRequires:	libfmt-devel >= 9.0
+BuildRequires:	libheif-devel >= 1.7
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libraw-devel >= 0.18
 BuildRequires:	libstdc++-devel >= 6:4.7
-BuildRequires:	libtiff-devel >= 3.9
+BuildRequires:	libtiff-devel >= 4.0
 BuildRequires:	libwebp-devel
-%{?with_opencv:BuildRequires:	opencv-devel >= 2.0}
+%{?with_opencv:BuildRequires:	opencv-devel >= 3.0}
 BuildRequires:	openjpeg2-devel >= 2.4
+%{?with_openvdb:BuildRequires:	openvdb-devel >= 5.0}
 BuildRequires:	ptex-devel >= 2.1
-BuildRequires:	pugixml-devel
+BuildRequires:	pugixml-devel >= 1.8
 BuildRequires:	python3-devel >= 1:2.7
 BuildRequires:	python3-pybind11 >= 2.2.0
-BuildRequires:	robin-map-devel
+BuildRequires:	robin-map-devel >= 0.6.2
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	squish-devel >= 1.10
@@ -80,6 +94,7 @@ BuildRequires:	squish-devel >= 1.10
 BuildRequires:	txt2man
 BuildRequires:	zlib-devel
 Requires:	OpenEXR >= 3.0.0
+Obsoletes:	OpenImageIO-plugin-field3d < 2.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -91,7 +106,7 @@ implemented by DLL/DSO plugins.
 
 Currently there are format plugins for: TIFF, JPEG/JFIF, OpenEXR, PNG,
 HDR/RGBE, Targa, JPEG-2000, DPX, Cineon, FITS, BMP, ICO, RMan Zfile,
-Softimage PIC, DDS, SGI, PNM/PPM/PGM/PBM, Field3d, WebP.
+Softimage PIC, DDS, SGI, PNM/PPM/PGM/PBM, OpenVDB, WebP.
 
 %description -l pl.UTF-8
 OpenImageIO to biblioteka do odczytu i zapisu obrazów oraz wiele
@@ -102,13 +117,14 @@ są implementowane przez wtyczki DLL/DSO.
 
 Obecnie istnieją wtyczki obsługujące formaty: TIFF, JPEG/JFIF,
 OpenEXR, PNG, HDR/RGBE, Targa, JPEG-2000, DPX, Cineon, FITS, BMP, ICO,
-RMan Zfile, Softimage PIC, DDS, SGI, PNM/PPM/PGM/PBM, Field3d, WebP.
+RMan Zfile, Softimage PIC, DDS, SGI, PNM/PPM/PGM/PBM, OpenVDB, WebP.
 
 %package devel
 Summary:	Header files for OpenImageIO library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki OpenImageIO
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	libfmt-devel >= 9.0
 Requires:	libstdc++-devel >= 6:4.7
 
 %description devel
@@ -173,7 +189,7 @@ Summary:	FFmpeg plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka FFmpeg dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	ffmpeg-libs >= 2.6
+Requires:	ffmpeg-libs >= 3.0
 
 %description plugin-ffmpeg
 OpenImageIO plugin to read FFmpeg files.
@@ -181,23 +197,12 @@ OpenImageIO plugin to read FFmpeg files.
 %description plugin-ffmpeg -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca pliki FFmpeg.
 
-%package plugin-field3d
-Summary:	Field3D plugin for OpenImageIO library
-Summary(pl.UTF-8):	Wtyczka Field3D dla biblioteki OpenImageIO
-Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-
-%description plugin-field3d
-OpenImageIO plugin to read Field3D files.
-
-%description plugin-field3d -l pl.UTF-8
-Wtyczka biblioteki OpenImageIO czytająca pliki Field3D.
-
 %package plugin-gif
 Summary:	Gif plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka Gif dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	giflib >= 5.0
 
 %description plugin-gif
 OpenImageIO plugin to read GIF files.
@@ -210,6 +215,7 @@ Summary:	HEIF plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka HEIF dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	libheif >= 1.7
 
 %description plugin-heif
 OpenImageIO plugin to read HEIF files.
@@ -267,6 +273,19 @@ OpenImageIO plugin to read and write OpenEXR files.
 
 %description plugin-openexr -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki OpenEXR.
+
+%package plugin-openvdb
+Summary:	OpenVDB plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka OpenVDB dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+Requires:	openvdb >= 5.0
+
+%description plugin-openvdb
+OpenImageIO plugin to read OpenVDB files.
+
+%description plugin-openvdb -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca pliki OpenVDB.
 
 %package plugin-png
 Summary:	PNG plugin for OpenImageIO library
@@ -335,7 +354,7 @@ Summary:	TIFF plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka TIFF dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libtiff >= 3.9
+Requires:	libtiff >= 4.0
 
 %description plugin-tiff
 OpenImageIO plugin to read and write TIFF files.
@@ -380,8 +399,6 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %patch2 -p1
 %patch3 -p1
 
-%{__rm} -r src/dds.imageio/squish
-
 %build
 install -d build
 cd build
@@ -389,14 +406,12 @@ cd build
 	-DCMAKE_INSTALL_MANDIR=%{_mandir}/man1 \
 	-DEMBEDPLUGINS=OFF \
 	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
+	-DINTERNALIZE_FMT=OFF \
 	-DLIB_INSTALL_DIR:PATH=%{_libdir} \
 	-DBUILD_TESTING=OFF \
 %ifarch i386 i486
 	-DNOTHREADS=1 \
 %endif
-	-DENABLE_FIELD3D=ON \
-	-DPYBIND11_HOME:PATH=%{py_incdir} \
-	-DPYLIB_INSTALL_DIR=%{py_sitedir} \
 	-DPYTHON_VERSION=%{py3_ver} \
 	-DUSE_EXTERNAL_PUGIXML=ON \
 	-DSTOP_ON_WARNING=OFF \
@@ -427,7 +442,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGES.md CREDITS.md LICENSE.md README.md
+%doc CHANGES.md CREDITS.md GOVERNANCE.md LICENSE-BSD.md README.md RELICENSING.md
 %attr(755,root,root) %{_bindir}/iconvert
 %attr(755,root,root) %{_bindir}/idiff
 %attr(755,root,root) %{_bindir}/igrep
@@ -435,9 +450,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/maketx
 %attr(755,root,root) %{_bindir}/oiiotool
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.2.3
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.2.4
 %attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.2.3
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.2.4
 %attr(755,root,root) %{_libdir}/bmp.imageio.so
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
@@ -445,7 +460,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/pnm.imageio.so
 %attr(755,root,root) %{_libdir}/rla.imageio.so
 %attr(755,root,root) %{_libdir}/sgi.imageio.so
-%attr(755,root,root) %{_libdir}/socket.imageio.so
 %attr(755,root,root) %{_libdir}/softimage.imageio.so
 %attr(755,root,root) %{_libdir}/targa.imageio.so
 %attr(755,root,root) %{_libdir}/zfile.imageio.so
@@ -486,10 +500,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/ffmpeg.imageio.so
 
-%files plugin-field3d
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/field3d.imageio.so
-
 %files plugin-gif
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gif.imageio.so
@@ -513,6 +523,12 @@ rm -rf $RPM_BUILD_ROOT
 %files plugin-openexr
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/openexr.imageio.so
+
+%if %{with openvdb}
+%files plugin-openvdb
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openvdb.imageio.so
+%endif
 
 %files plugin-png
 %defattr(644,root,root,755)
