@@ -417,6 +417,7 @@ cd build
 	-DSTOP_ON_WARNING=OFF \
 	%{!?with_ocio:-DUSE_OCIO=OFF} \
 	%{!?with_opencv:-DUSE_OPENCV=OFF} \
+	%{!?with_qt6:-DUSE_QT6=OFF} \
 	%{!?with_tbb:-DUSE_TBB=OFF}
 
 %{__make}
