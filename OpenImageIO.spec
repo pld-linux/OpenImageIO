@@ -126,6 +126,7 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	libfmt-devel >= 9.0
 Requires:	libstdc++-devel >= 6:4.7
+Obsoletes:	OpenImageIO-apidocs < 2.3
 
 %description devel
 Header files for OpenImageIO library.
@@ -387,6 +388,7 @@ Summary:	Python binding for OpenImageIO library
 Summary(pl.UTF-8):	Wiązanie Pythona do biblioteki OpenImageIO
 Group:		Libraries/Python
 Requires:	%{name} = %{version}-%{release}
+Obsoletes:	python-OpenImageIO < 2.3.12.0-3
 
 %description -n python3-OpenImageIO
 Python binding for OpenImageIO library.
