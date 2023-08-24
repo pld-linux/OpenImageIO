@@ -72,7 +72,7 @@ BuildRequires:	hdf5-devel
 BuildRequires:	jasper-devel
 BuildRequires:	libcineon-devel
 BuildRequires:	libfmt-devel >= 9.0
-BuildRequires:	libheif-devel >= 1.7
+BuildRequires:	libheif-devel >= 1.13
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libraw-devel >= 0.18
@@ -215,7 +215,7 @@ Summary:	HEIF plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka HEIF dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libheif >= 1.7
+Requires:	libheif >= 1.13
 
 %description plugin-heif
 OpenImageIO plugin to read HEIF files.
