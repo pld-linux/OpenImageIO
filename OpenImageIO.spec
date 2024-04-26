@@ -33,16 +33,16 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	2.4.14.0
-Release:	3
+Version:	2.4.17.0
+Release:	1
 License:	Apache v2.0
 Group:		Libraries
-#Source0Download: https://github.com/OpenImageIO/oiio/releases
-Source0:	https://github.com/OpenImageIO/oiio/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	cc0e320302622783dfe16ac6ae1946b3
+#Source0Download: https://github.com/AcademySoftwareFoundation/OpenImageIO/releases
+Source0:	https://github.com/AcademySoftwareFoundation/OpenImageIO/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	ff2961c30d2586fb05458011bc5b0181
 Patch2:		%{name}-system-libcineon.patch
 Patch3:		no-clang-format.patch
-URL:		https://github.com/OpenImageIO/oiio
+URL:		https://github.com/AcademySoftwareFoundation/OpenImageIO
 BuildRequires:	Imath-devel >= 3.0.0
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
 BuildRequires:	OpenEXR-devel >= 3.0.0
@@ -397,7 +397,7 @@ Python binding for OpenImageIO library.
 Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
-%setup -q -n oiio-%{version}
+%setup -q
 %patch2 -p1
 %patch3 -p1
 

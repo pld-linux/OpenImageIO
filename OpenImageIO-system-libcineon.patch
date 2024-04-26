@@ -1,7 +1,7 @@
---- oiio-2.4.14.0/src/cineon.imageio/CMakeLists.txt.orig	2023-08-21 21:11:54.336404839 +0200
-+++ oiio-2.4.14.0/src/cineon.imageio/CMakeLists.txt	2023-08-21 21:26:52.004875084 +0200
+--- OpenImageIO-2.4.17.0/src/cineon.imageio/CMakeLists.txt.orig	2024-04-26 19:25:33.286182160 +0200
++++ OpenImageIO-2.4.17.0/src/cineon.imageio/CMakeLists.txt	2024-04-26 19:49:10.735169846 +0200
 @@ -3,9 +3,7 @@
- # https://github.com/OpenImageIO/oiio
+ # https://github.com/AcademySoftwareFoundation/OpenImageIO
  
  add_oiio_plugin (cineoninput.cpp
 -                 libcineon/Cineon.cpp libcineon/OutStream.cpp libcineon/Codec.cpp
