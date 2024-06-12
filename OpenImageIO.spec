@@ -33,19 +33,19 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	2.4.17.0
+Version:	2.5.12.0
 Release:	1
 License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/AcademySoftwareFoundation/OpenImageIO/releases
 Source0:	https://github.com/AcademySoftwareFoundation/OpenImageIO/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	ff2961c30d2586fb05458011bc5b0181
+# Source0-md5:	f4d9520babfb659b4f1f26e1596fef70
 Patch2:		%{name}-system-libcineon.patch
 Patch3:		no-clang-format.patch
 URL:		https://github.com/AcademySoftwareFoundation/OpenImageIO
-BuildRequires:	Imath-devel >= 3.0.0
+BuildRequires:	Imath-devel >= 3.1
 %{?with_ocio:BuildRequires:	OpenColorIO-devel}
-BuildRequires:	OpenEXR-devel >= 3.0.0
+BuildRequires:	OpenEXR-devel >= 3.1
 BuildRequires:	OpenGL-devel
 %if %{with qt6}
 BuildRequires:	Qt6Core-devel >= 6
@@ -72,11 +72,11 @@ BuildRequires:	hdf5-devel
 BuildRequires:	jasper-devel
 BuildRequires:	libcineon-devel
 BuildRequires:	libfmt-devel >= 9.0
-BuildRequires:	libheif-devel >= 1.13
-BuildRequires:	libjpeg-devel
+BuildRequires:	libheif-devel >= 1.16
+BuildRequires:	libjpeg-turbo-devel >= 2.1
 BuildRequires:	libpng-devel
 BuildRequires:	libraw-devel >= 0.18
-BuildRequires:	libstdc++-devel >= 6:4.7
+BuildRequires:	libstdc++-devel >= 6:7
 BuildRequires:	libtiff-devel >= 4.0
 BuildRequires:	libwebp-devel
 %{?with_opencv:BuildRequires:	opencv-devel >= 3.0}
@@ -85,7 +85,7 @@ BuildRequires:	openjpeg2-devel >= 2.4
 BuildRequires:	ptex-devel >= 2.1
 BuildRequires:	pugixml-devel >= 1.8
 BuildRequires:	python3-devel >= 1:2.7
-BuildRequires:	python3-pybind11 >= 2.2.0
+BuildRequires:	python3-pybind11 >= 2.4.2
 BuildRequires:	robin-map-devel >= 0.6.2
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.605
@@ -93,7 +93,7 @@ BuildRequires:	squish-devel >= 1.10
 %{?with_tbb:BuildRequires:	tbb-devel >= 2018}
 BuildRequires:	txt2man
 BuildRequires:	zlib-devel
-Requires:	OpenEXR >= 3.0.0
+Requires:	OpenEXR >= 3.1
 Obsoletes:	OpenImageIO-plugin-field3d < 2.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -125,7 +125,7 @@ Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki OpenImageIO
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	libfmt-devel >= 9.0
-Requires:	libstdc++-devel >= 6:4.7
+Requires:	libstdc++-devel >= 6:7
 Obsoletes:	OpenImageIO-apidocs < 2.3
 
 %description devel
@@ -216,7 +216,7 @@ Summary:	HEIF plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka HEIF dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libheif >= 1.13
+Requires:	libheif >= 1.16
 
 %description plugin-heif
 OpenImageIO plugin to read HEIF files.
@@ -241,6 +241,7 @@ Summary:	JPEG plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka JPEG dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	libjpeg-turbo >= 2.1
 
 %description plugin-jpeg
 OpenImageIO plugin to read and write JPEG files (with TIFF/EXIF
@@ -405,6 +406,7 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 install -d build
 cd build
 %cmake .. \
+	-DCMAKE_CXX_STANDARD=17 \
 	-DCMAKE_INSTALL_MANDIR=%{_mandir}/man1 \
 	-DEMBEDPLUGINS=OFF \
 	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
@@ -434,6 +436,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__mv} $RPM_BUILD_ROOT%{_bindir}/{iv,oiiv}
 %{__mv} $RPM_BUILD_ROOT%{_mandir}/man1/{iv,oiiv}.1
 
+# shouldn't be installed, but default ENABLE_INSTALL_testtex=OFF in src/testtex/CMakeLists.txt doesn't work(?)
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/testtex
+
 # installed as %doc
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}
 
@@ -453,9 +458,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/maketx
 %attr(755,root,root) %{_bindir}/oiiotool
 %attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.2.5
 %attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.2.4
+%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.2.5
 %attr(755,root,root) %{_libdir}/bmp.imageio.so
 %attr(755,root,root) %{_libdir}/fits.imageio.so
 %attr(755,root,root) %{_libdir}/hdr.imageio.so
