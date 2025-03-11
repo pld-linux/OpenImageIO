@@ -399,8 +399,8 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
 %setup -q
-%patch2 -p1
-%patch3 -p1
+%patch -P 2 -p1
+%patch -P 3 -p1
 
 %build
 install -d build
