@@ -33,13 +33,14 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	2.5.12.0
-Release:	8
+Version:	3.1.7.0
+Release:	1
 License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/AcademySoftwareFoundation/OpenImageIO/releases
 Source0:	https://github.com/AcademySoftwareFoundation/OpenImageIO/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	f4d9520babfb659b4f1f26e1596fef70
+# Source0-md5:	951527a755911320659d4e23bb8e5ad9
+Patch1:		plugins-link.patch
 Patch2:		%{name}-system-libcineon.patch
 Patch3:		no-clang-format.patch
 URL:		https://github.com/AcademySoftwareFoundation/OpenImageIO
@@ -78,7 +79,8 @@ BuildRequires:	libpng-devel
 BuildRequires:	libraw-devel >= 0.18
 BuildRequires:	libstdc++-devel >= 6:7
 BuildRequires:	libtiff-devel >= 4.0
-BuildRequires:	libwebp-devel
+BuildRequires:	libwebp-devel >= 1.6.0-4
+BuildRequires:	libjxl-devel
 %{?with_opencv:BuildRequires:	opencv-devel >= 3.0}
 BuildRequires:	openjpeg2-devel >= 2.4
 %{?with_openvdb:BuildRequires:	openvdb-devel >= 5.0}
@@ -263,6 +265,18 @@ OpenImageIO plugin to read and write JPEG2000 files.
 %description plugin-jpeg2000 -l pl.UTF-8
 Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki JPEG2000.
 
+%package plugin-jpegxl
+Summary:	JPEG XL plugin for OpenImageIO library
+Summary(pl.UTF-8):	Wtyczka JPEG XL dla biblioteki OpenImageIO
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-jpegxl
+OpenImageIO plugin to read and write JPEG XL files.
+
+%description plugin-jpegxl -l pl.UTF-8
+Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki JPEG XL.
+
 %package plugin-openexr
 Summary:	OpenEXR plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka OpenEXR dla biblioteki OpenImageIO
@@ -399,8 +413,9 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
 %setup -q
-%patch -P 2 -p1
-%patch -P 3 -p1
+%patch -P1 -p1
+%patch -P2 -p1
+%patch -P3 -p1
 
 %build
 install -d build
@@ -450,29 +465,29 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGES.md CREDITS.md GOVERNANCE.md LICENSE-BSD.md README.md RELICENSING.md
+%doc CHANGES.md CREDITS.md GOVERNANCE.md LICENSE.md README.md RELICENSING.md
 %attr(755,root,root) %{_bindir}/iconvert
 %attr(755,root,root) %{_bindir}/idiff
 %attr(755,root,root) %{_bindir}/igrep
 %attr(755,root,root) %{_bindir}/iinfo
 %attr(755,root,root) %{_bindir}/maketx
 %attr(755,root,root) %{_bindir}/oiiotool
-%attr(755,root,root) %{_libdir}/libOpenImageIO.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO.so.2.5
-%attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libOpenImageIO_Util.so.2.5
-%attr(755,root,root) %{_libdir}/bmp.imageio.so
-%attr(755,root,root) %{_libdir}/fits.imageio.so
-%attr(755,root,root) %{_libdir}/hdr.imageio.so
-%attr(755,root,root) %{_libdir}/iff.imageio.so
-%attr(755,root,root) %{_libdir}/pnm.imageio.so
-%attr(755,root,root) %{_libdir}/rla.imageio.so
-%attr(755,root,root) %{_libdir}/sgi.imageio.so
-%attr(755,root,root) %{_libdir}/softimage.imageio.so
-%attr(755,root,root) %{_libdir}/targa.imageio.so
-%attr(755,root,root) %{_libdir}/zfile.imageio.so
-%attr(755,root,root) %{_libdir}/null.imageio.so
-%attr(755,root,root) %{_libdir}/term.imageio.so
+%{_libdir}/libOpenImageIO.so.*.*.*
+%ghost %{_libdir}/libOpenImageIO.so.3.1
+%{_libdir}/libOpenImageIO_Util.so.*.*.*
+%ghost %{_libdir}/libOpenImageIO_Util.so.3.1
+%{_libdir}/bmp.imageio.so
+%{_libdir}/fits.imageio.so
+%{_libdir}/hdr.imageio.so
+%{_libdir}/iff.imageio.so
+%{_libdir}/pnm.imageio.so
+%{_libdir}/rla.imageio.so
+%{_libdir}/sgi.imageio.so
+%{_libdir}/softimage.imageio.so
+%{_libdir}/targa.imageio.so
+%{_libdir}/zfile.imageio.so
+%{_libdir}/null.imageio.so
+%{_libdir}/term.imageio.so
 %{_mandir}/man1/iconvert.1*
 %{_mandir}/man1/idiff.1*
 %{_mandir}/man1/igrep.1*
@@ -482,85 +497,89 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libOpenImageIO.so
-%attr(755,root,root) %{_libdir}/libOpenImageIO_Util.so
+%{_libdir}/libOpenImageIO.so
+%{_libdir}/libOpenImageIO_Util.so
 %{_includedir}/OpenImageIO
 %{_pkgconfigdir}/OpenImageIO.pc
 %{_libdir}/cmake/OpenImageIO
 
 %files plugin-cineon
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/cineon.imageio.so
+%{_libdir}/cineon.imageio.so
 
 %files plugin-dicom
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/dicom.imageio.so
+%{_libdir}/dicom.imageio.so
 
 %files plugin-dds
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/dds.imageio.so
+%{_libdir}/dds.imageio.so
 
 %files plugin-dpx
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/dpx.imageio.so
+%{_libdir}/dpx.imageio.so
 
 %files plugin-ffmpeg
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/ffmpeg.imageio.so
+%{_libdir}/ffmpeg.imageio.so
 
 %files plugin-gif
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/gif.imageio.so
+%{_libdir}/gif.imageio.so
 
 %files plugin-heif
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/heif.imageio.so
+%{_libdir}/heif.imageio.so
 
 %files plugin-ico
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/ico.imageio.so
+%{_libdir}/ico.imageio.so
 
 %files plugin-jpeg
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/jpeg.imageio.so
+%{_libdir}/jpeg.imageio.so
 
 %files plugin-jpeg2000
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/jpeg2000.imageio.so
+%{_libdir}/jpeg2000.imageio.so
+
+%files plugin-jpegxl
+%defattr(644,root,root,755)
+%{_libdir}/jpegxl.imageio.so
 
 %files plugin-openexr
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openexr.imageio.so
+%{_libdir}/openexr.imageio.so
 
 %if %{with openvdb}
 %files plugin-openvdb
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openvdb.imageio.so
+%{_libdir}/openvdb.imageio.so
 %endif
 
 %files plugin-png
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/png.imageio.so
+%{_libdir}/png.imageio.so
 
 %files plugin-psd
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/psd.imageio.so
+%{_libdir}/psd.imageio.so
 
 %files plugin-ptex
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/ptex.imageio.so
+%{_libdir}/ptex.imageio.so
 
 %files plugin-raw
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/raw.imageio.so
+%{_libdir}/raw.imageio.so
 
 %files plugin-tiff
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/tiff.imageio.so
+%{_libdir}/tiff.imageio.so
 
 %files plugin-webp
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/webp.imageio.so
+%{_libdir}/webp.imageio.so
 
 %files iv
 %defattr(644,root,root,755)
@@ -572,3 +591,5 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{py3_sitedir}/OpenImageIO
 %attr(755,root,root) %{py3_sitedir}/OpenImageIO/OpenImageIO*.so
 %{py3_sitedir}/OpenImageIO/__init__.py
+%{py3_sitedir}/OpenImageIO/__init__.pyi
+%{py3_sitedir}/OpenImageIO/py.typed

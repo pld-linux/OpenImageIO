@@ -1,0 +1,13 @@
+--- OpenImageIO-3.1.7.0/src/cmake/add_oiio_plugin.cmake~	2025-11-01 07:47:41.000000000 +0100
++++ OpenImageIO-3.1.7.0/src/cmake/add_oiio_plugin.cmake	2025-11-30 12:53:31.556655652 +0100
+@@ -76,8 +76,8 @@
+                                         OpenImageIO_EXPORTS)
+             target_compile_options (${_plugin_NAME} PRIVATE ${_plugin_COMPILE_OPTIONS})
+             target_include_directories (${_plugin_NAME} BEFORE PRIVATE ${_plugin_INCLUDE_DIRS})
+-            target_link_directories (${_plugin_NAME} PUBLIC OpenImageIO
+-                                                     PRIVATE ${_plugin_LINK_DIRECTORIES})
++#            target_link_directories (${_plugin_NAME} PUBLIC OpenImageIO
++#                                                     PRIVATE ${_plugin_LINK_DIRECTORIES})
+             target_link_libraries (${_plugin_NAME} PUBLIC OpenImageIO
+                                                    PRIVATE ${_plugin_LINK_LIBRARIES})
+             set_target_properties (${_plugin_NAME} PROPERTIES PREFIX "" FOLDER "Plugins")
