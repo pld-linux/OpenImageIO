@@ -1,4 +1,5 @@
 # TODO:
+# - libuhdr >= 1.3
 # - Nuke >= 7.0?  https://www.foundry.com/products/nuke/ (proprietary)
 # - R3DSDK? https://www.red.com/downloads/r3d-sdk (proprietary)
 # - package fonts?
@@ -45,7 +46,7 @@ Patch2:		%{name}-system-libcineon.patch
 Patch3:		no-clang-format.patch
 URL:		https://github.com/AcademySoftwareFoundation/OpenImageIO
 BuildRequires:	Imath-devel >= 3.1
-%{?with_ocio:BuildRequires:	OpenColorIO-devel}
+%{?with_ocio:BuildRequires:	OpenColorIO-devel >= 2.3}
 BuildRequires:	OpenEXR-devel >= 3.1
 BuildRequires:	OpenGL-devel
 %if %{with qt6}
@@ -63,10 +64,10 @@ BuildRequires:	Qt5Widgets-devel >= 5.6
 BuildRequires:	boost-devel >= 1.66
 BuildRequires:	boost-python3-devel >= 1.66
 BuildRequires:	bzip2-devel
-BuildRequires:	cmake >= 3.12
+BuildRequires:	cmake >= 3.18.2
 BuildRequires:	dcmtk-devel >= 3.6.1
-BuildRequires:	ffmpeg-devel >= 3.0
-BuildRequires:	freetype-devel >= 2.0
+BuildRequires:	ffmpeg-devel >= 4.0
+BuildRequires:	freetype-devel >= 1:2.10.0
 BuildRequires:	giflib-devel >= 5.0
 BuildRequires:	glew-devel >= 1.5.1
 BuildRequires:	hdf5-devel
@@ -75,20 +76,21 @@ BuildRequires:	libcineon-devel
 BuildRequires:	libfmt-devel >= 9.0
 BuildRequires:	libheif-devel >= 1.16
 BuildRequires:	libjpeg-turbo-devel >= 2.1
-BuildRequires:	libpng-devel
-BuildRequires:	libraw-devel >= 0.18
+BuildRequires:	libpng-devel >= 2:1.6.0
+BuildRequires:	libraw-devel >= 0.20
 BuildRequires:	libstdc++-devel >= 6:7
 BuildRequires:	libtiff-devel >= 4.0
 BuildRequires:	libwebp-devel >= 1.6.0-4
-BuildRequires:	libjxl-devel
-%{?with_opencv:BuildRequires:	opencv-devel >= 3.0}
+BuildRequires:	libjxl-devel >= 0.10.1
+%{?with_opencv:BuildRequires:	opencv-devel >= 4.0}
 BuildRequires:	openjpeg2-devel >= 2.4
-%{?with_openvdb:BuildRequires:	openvdb-devel >= 5.0}
+BuildRequires:	openjph-devel >= 0.21.2
+%{?with_openvdb:BuildRequires:	openvdb-devel >= 9.0}
 BuildRequires:	ptex-devel >= 2.1
 BuildRequires:	pugixml-devel >= 1.8
-BuildRequires:	python3-devel >= 1:2.7
-BuildRequires:	python3-pybind11 >= 2.4.2
-BuildRequires:	robin-map-devel >= 0.6.2
+BuildRequires:	python3-devel >= 1:3.7
+BuildRequires:	python3-pybind11 >= 2.7
+BuildRequires:	robin-map-devel >= 1.2.0
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	squish-devel >= 1.10
@@ -192,7 +194,7 @@ Summary:	FFmpeg plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka FFmpeg dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	ffmpeg-libs >= 3.0
+Requires:	ffmpeg-libs >= 4.0
 
 %description plugin-ffmpeg
 OpenImageIO plugin to read FFmpeg files.
@@ -270,6 +272,7 @@ Summary:	JPEG XL plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka JPEG XL dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	libjxl >= 0.10.1
 
 %description plugin-jpegxl
 OpenImageIO plugin to read and write JPEG XL files.
@@ -282,7 +285,7 @@ Summary:	OpenEXR plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka OpenEXR dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	OpenEXR >= 2.0
+Requires:	OpenEXR >= 3.1
 
 %description plugin-openexr
 OpenImageIO plugin to read and write OpenEXR files.
@@ -295,7 +298,7 @@ Summary:	OpenVDB plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka OpenVDB dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	openvdb >= 5.0
+Requires:	openvdb >= 9.0
 
 %description plugin-openvdb
 OpenImageIO plugin to read OpenVDB files.
@@ -345,7 +348,7 @@ Summary:	RAW plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka RAW dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libraw >= 0.18
+Requires:	libraw >= 0.20
 
 %description plugin-raw
 OpenImageIO plugin to readTRAW files.
@@ -418,19 +421,12 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 %patch -P3 -p1
 
 %build
-install -d build
-cd build
-%cmake .. \
+%cmake -B build \
 	-DCMAKE_CXX_STANDARD=17 \
 	-DCMAKE_INSTALL_MANDIR=%{_mandir}/man1 \
 	-DEMBEDPLUGINS=OFF \
-	-DINCLUDE_INSTALL_DIR=%{_includedir}/%{name} \
-	-DINTERNALIZE_FMT=OFF \
-	-DLIB_INSTALL_DIR:PATH=%{_libdir} \
 	-DBUILD_TESTING=OFF \
-%ifarch i386 i486
-	-DNOTHREADS=1 \
-%endif
+	-DOIIO_INTERNALIZE_FMT=OFF \
 	-DPYTHON_VERSION=%{py3_ver} \
 	-DUSE_EXTERNAL_PUGIXML=ON \
 	-DSTOP_ON_WARNING=OFF \
@@ -439,7 +435,7 @@ cd build
 	%{!?with_qt6:-DUSE_QT6=OFF} \
 	%{!?with_tbb:-DUSE_TBB=OFF}
 
-%{__make}
+%{__make} -C build
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -465,7 +461,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGES.md CREDITS.md GOVERNANCE.md LICENSE.md README.md RELICENSING.md
+%doc CHANGES.md CREDITS.md GOVERNANCE.md LICENSE.md README.md RELICENSING.md SECURITY.md THIRD-PARTY.md
 %attr(755,root,root) %{_bindir}/iconvert
 %attr(755,root,root) %{_bindir}/idiff
 %attr(755,root,root) %{_bindir}/igrep
