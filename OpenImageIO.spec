@@ -1,5 +1,4 @@
 # TODO:
-# - libuhdr >= 1.3
 # - Nuke >= 7.0?  https://www.foundry.com/products/nuke/ (proprietary)
 # - R3DSDK? https://www.red.com/downloads/r3d-sdk (proprietary)
 # - package fonts?
@@ -76,12 +75,13 @@ BuildRequires:	libcineon-devel
 BuildRequires:	libfmt-devel >= 9.0
 BuildRequires:	libheif-devel >= 1.16
 BuildRequires:	libjpeg-turbo-devel >= 2.1
+BuildRequires:	libjxl-devel >= 0.10.1
 BuildRequires:	libpng-devel >= 2:1.6.0
 BuildRequires:	libraw-devel >= 0.20
 BuildRequires:	libstdc++-devel >= 6:7
 BuildRequires:	libtiff-devel >= 4.0
+BuildRequires:	libultrahdr-devel >= 1.3
 BuildRequires:	libwebp-devel >= 1.6.0-4
-BuildRequires:	libjxl-devel >= 0.10.1
 %{?with_opencv:BuildRequires:	opencv-devel >= 4.0}
 BuildRequires:	openjpeg2-devel >= 2.4
 BuildRequires:	openjph-devel >= 0.21.2
@@ -246,6 +246,7 @@ Summary(pl.UTF-8):	Wtyczka JPEG dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	libjpeg-turbo >= 2.1
+Requires:	libultrahdr >= 1.3
 
 %description plugin-jpeg
 OpenImageIO plugin to read and write JPEG files (with TIFF/EXIF
