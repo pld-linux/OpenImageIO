@@ -11,8 +11,8 @@
  
  # Note: OIIO doesn't support cineon output, so we don't compile
  # libcineon/Writer.cpp
---- oiio-2.4.14.0/src/cineon.imageio/cineoninput.cpp.orig	2023-08-01 22:15:24.000000000 +0200
-+++ oiio-2.4.14.0/src/cineon.imageio/cineoninput.cpp	2023-08-22 17:46:26.265122755 +0200
+--- OpenImageIO-3.1.17.0/src/cineon.imageio/cineoninput.cpp.orig	2026-08-31 04:40:40.000000000 +0200
++++ OpenImageIO-3.1.17.0/src/cineon.imageio/cineoninput.cpp	2026-09-16 17:22:15.821626586 +0200
 @@ -4,7 +4,7 @@
  
  #include <cmath>
@@ -21,8 +21,8 @@
 +#include <Cineon.h>
  
  #include <OpenImageIO/dassert.h>
- #include <OpenImageIO/imageio.h>
-@@ -337,8 +337,8 @@ CineonInput::open(const std::string& nam
+ #include <OpenImageIO/filesystem.h>
+@@ -368,8 +368,8 @@ CineonInput::open(const std::string& nam
          // FIXME: do something about the time zone
      }
      {

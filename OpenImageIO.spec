@@ -16,7 +16,7 @@
 %bcond_without	ocio		# OpenColorIO support in library
 %bcond_without	opencv		# OpenCV support in library
 %bcond_without	openvdb		# OpenVDB plugin
-%bcond_with	qt6		# Qt6 instead of Qt5
+%bcond_with	qt5		# Qt5 instead of Qt6
 %bcond_without	tbb		# Threading Building Blocks
 #
 %ifarch i386 i486
@@ -33,31 +33,30 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	3.1.7.0
-Release:	5
+Version:	3.1.17.0
+Release:	1
 License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/AcademySoftwareFoundation/OpenImageIO/releases
 Source0:	https://github.com/AcademySoftwareFoundation/OpenImageIO/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	951527a755911320659d4e23bb8e5ad9
-Patch1:		plugins-link.patch
+# Source0-md5:	6129ccf733f6cc6c9d14550d3765d9af
 Patch2:		%{name}-system-libcineon.patch
 Patch3:		no-clang-format.patch
 URL:		https://github.com/AcademySoftwareFoundation/OpenImageIO
 BuildRequires:	Imath-devel >= 3.1
 %{?with_ocio:BuildRequires:	OpenColorIO-devel >= 2.3}
-BuildRequires:	OpenEXR-devel >= 3.1
+BuildRequires:	OpenEXR-devel >= 3.1.10
 BuildRequires:	OpenGL-devel
-%if %{with qt6}
-BuildRequires:	Qt6Core-devel >= 6
-BuildRequires:	Qt6Gui-devel >= 6
-BuildRequires:	Qt6OpenGLWidgets-devel >= 6
-BuildRequires:	Qt6Widgets-devel >= 6
-%else
+%if %{with qt5}
 BuildRequires:	Qt5Core-devel >= 5.6
 BuildRequires:	Qt5Gui-devel >= 5.6
 BuildRequires:	Qt5OpenGL-devel >= 5.6
 BuildRequires:	Qt5Widgets-devel >= 5.6
+%else
+BuildRequires:	Qt6Core-devel >= 6
+BuildRequires:	Qt6Gui-devel >= 6
+BuildRequires:	Qt6OpenGL-devel >= 6
+BuildRequires:	Qt6Widgets-devel >= 6
 %endif
 # filesystem, regex, system, thread
 BuildRequires:	boost-devel >= 1.66
@@ -72,20 +71,22 @@ BuildRequires:	glew-devel >= 1.5.1
 BuildRequires:	hdf5-devel
 BuildRequires:	jasper-devel
 BuildRequires:	libcineon-devel
+BuildRequires:	libdeflate-devel >= 1.18
 BuildRequires:	libfmt-devel >= 9.0
-BuildRequires:	libheif-devel >= 1.16
+BuildRequires:	libheif-devel >= 1.17
 BuildRequires:	libjpeg-turbo-devel >= 2.1
 BuildRequires:	libjxl-devel >= 0.10.1
 BuildRequires:	libpng-devel >= 2:1.6.0
-BuildRequires:	libraw-devel >= 0.20
+BuildRequires:	libraw-devel >= 0.21.3
 BuildRequires:	libstdc++-devel >= 6:7
-BuildRequires:	libtiff-devel >= 4.0
+BuildRequires:	libtiff-devel >= 4.5
 BuildRequires:	libultrahdr-devel >= 1.3
 BuildRequires:	libwebp-devel >= 1.6.0-4
 %{?with_opencv:BuildRequires:	opencv-devel >= 4.0}
 BuildRequires:	openjpeg2-devel >= 2.4
 BuildRequires:	openjph-devel >= 0.21.2
 %{?with_openvdb:BuildRequires:	openvdb-devel >= 9.0}
+BuildRequires:	pkgconfig
 BuildRequires:	ptex-devel >= 2.1
 BuildRequires:	pugixml-devel >= 1.8
 BuildRequires:	python3-devel >= 1:3.7
@@ -97,7 +98,7 @@ BuildRequires:	squish-devel >= 1.10
 %{?with_tbb:BuildRequires:	tbb-devel >= 2018}
 BuildRequires:	txt2man
 BuildRequires:	zlib-devel
-Requires:	OpenEXR >= 3.1
+Requires:	OpenEXR >= 3.1.10
 Obsoletes:	OpenImageIO-plugin-field3d < 2.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -220,7 +221,7 @@ Summary:	HEIF plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka HEIF dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libheif >= 1.16
+Requires:	libheif >= 1.17
 
 %description plugin-heif
 OpenImageIO plugin to read HEIF files.
@@ -286,7 +287,7 @@ Summary:	OpenEXR plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka OpenEXR dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	OpenEXR >= 3.1
+Requires:	OpenEXR >= 3.1.10
 
 %description plugin-openexr
 OpenImageIO plugin to read and write OpenEXR files.
@@ -349,7 +350,7 @@ Summary:	RAW plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka RAW dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libraw >= 0.20
+Requires:	libraw >= 0.21.3
 
 %description plugin-raw
 OpenImageIO plugin to readTRAW files.
@@ -374,7 +375,7 @@ Summary:	TIFF plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka TIFF dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libtiff >= 4.0
+Requires:	libtiff >= 4.5
 
 %description plugin-tiff
 OpenImageIO plugin to read and write TIFF files.
@@ -417,7 +418,6 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
 %setup -q
-%patch -P1 -p1
 %patch -P2 -p1
 %patch -P3 -p1
 
@@ -433,7 +433,7 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 	-DSTOP_ON_WARNING=OFF \
 	%{!?with_ocio:-DUSE_OCIO=OFF} \
 	%{!?with_opencv:-DUSE_OPENCV=OFF} \
-	%{!?with_qt6:-DUSE_QT6=OFF} \
+	%{?with_qt5:-DUSE_QT6=OFF} \
 	%{!?with_tbb:-DUSE_TBB=OFF}
 
 %{__make} -C build

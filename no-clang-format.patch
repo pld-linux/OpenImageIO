@@ -1,11 +1,11 @@
---- oiio-2.4.14.0/src/cmake/compiler.cmake.orig	2023-08-21 21:27:17.401404166 +0200
-+++ oiio-2.4.14.0/src/cmake/compiler.cmake	2023-08-21 21:28:41.787613674 +0200
-@@ -508,7 +508,7 @@ endif ()
+--- OpenImageIO-3.1.17.0/src/cmake/compiler.cmake.orig	2026-08-31 04:40:40.000000000 +0200
++++ OpenImageIO-3.1.17.0/src/cmake/compiler.cmake	2026-09-16 17:34:03.126544318 +0200
+@@ -585,7 +585,7 @@ endif ()
  #
  # Note: skip all of this checking, setup, and cmake-format target if this
  # is being built as a subproject.
 -if (PROJECT_IS_TOP_LEVEL)
 +if (FALSE)
      set (CLANG_FORMAT_EXE_HINT "" CACHE PATH "clang-format executable's directory (will search if not specified")
-     set (CLANG_FORMAT_INCLUDES "src/*.h" "src/*.cpp testsuite/*.cpp testsuite/*.h"
+     set (CLANG_FORMAT_INCLUDES "src/*.h" "src/*.cpp" "testsuite/*.cpp" "testsuite/*.h"
          CACHE STRING "Glob patterns to include for clang-format")
