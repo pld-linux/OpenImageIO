@@ -34,7 +34,7 @@ Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
 Version:	3.1.17.0
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/AcademySoftwareFoundation/OpenImageIO/releases
