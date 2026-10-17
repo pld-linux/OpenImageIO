@@ -18,6 +18,7 @@
 %bcond_without	openvdb		# OpenVDB plugin
 %bcond_with	qt5		# Qt5 instead of Qt6
 %bcond_without	tbb		# Threading Building Blocks
+%bcond_with	sse42		# use SSE4.2 as x86_64 SIMD baseline
 #
 %ifarch i386 i486
 # https://github.com/OpenImageIO/oiio/issues/583
@@ -33,13 +34,14 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	3.1.17.0
-Release:	3
+Version:	3.2.1.2
+Release:	1
 License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/AcademySoftwareFoundation/OpenImageIO/releases
 Source0:	https://github.com/AcademySoftwareFoundation/OpenImageIO/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	6129ccf733f6cc6c9d14550d3765d9af
+# Source0-md5:	66404916221c772550b758f4328fca31
+Patch1:		%{name}-prefer-shared.patch
 Patch2:		%{name}-system-libcineon.patch
 Patch3:		no-clang-format.patch
 URL:		https://github.com/AcademySoftwareFoundation/OpenImageIO
@@ -58,12 +60,9 @@ BuildRequires:	Qt6Gui-devel >= 6
 BuildRequires:	Qt6OpenGL-devel >= 6
 BuildRequires:	Qt6Widgets-devel >= 6
 %endif
-# filesystem, regex, system, thread
-BuildRequires:	boost-devel >= 1.66
-BuildRequires:	boost-python3-devel >= 1.66
 BuildRequires:	bzip2-devel
-BuildRequires:	cmake >= 3.18.2
-BuildRequires:	dcmtk-devel >= 3.6.1
+BuildRequires:	cmake >= 3.23
+BuildRequires:	dcmtk-devel >= 3.6.2
 BuildRequires:	ffmpeg-devel >= 4.0
 BuildRequires:	freetype-devel >= 1:2.10.0
 BuildRequires:	giflib-devel >= 5.0
@@ -74,11 +73,12 @@ BuildRequires:	libcineon-devel
 BuildRequires:	libdeflate-devel >= 1.18
 BuildRequires:	libfmt-devel >= 9.0
 BuildRequires:	libheif-devel >= 1.17
+# libjpeg-devel >=9 in case of IJG
 BuildRequires:	libjpeg-turbo-devel >= 2.1
 BuildRequires:	libjxl-devel >= 0.10.1
 BuildRequires:	libpng-devel >= 2:1.6.0
 BuildRequires:	libraw-devel >= 0.21.3
-BuildRequires:	libstdc++-devel >= 6:7
+BuildRequires:	libstdc++-devel >= 6:9.3
 BuildRequires:	libtiff-devel >= 4.5
 BuildRequires:	libultrahdr-devel >= 1.3
 BuildRequires:	libwebp-devel >= 1.6.0-4
@@ -90,7 +90,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	ptex-devel >= 2.1
 BuildRequires:	pugixml-devel >= 1.8
 BuildRequires:	python3-devel >= 1:3.7
-BuildRequires:	python3-pybind11 >= 2.7
+BuildRequires:	python3-nanobind
 BuildRequires:	robin-map-devel >= 1.2.0
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.605
@@ -99,6 +99,12 @@ BuildRequires:	squish-devel >= 1.10
 BuildRequires:	txt2man
 BuildRequires:	zlib-devel
 Requires:	OpenEXR >= 3.1.10
+%ifarch %{x8664} x32
+Requires:	cpuinfo(sse2)
+%if %{with sse42}
+Requires:	cpuinfo(sse4_2)
+%endif
+%endif
 Obsoletes:	OpenImageIO-plugin-field3d < 2.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -130,7 +136,7 @@ Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki OpenImageIO
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	libfmt-devel >= 9.0
-Requires:	libstdc++-devel >= 6:7
+Requires:	libstdc++-devel >= 6:9.3
 Obsoletes:	OpenImageIO-apidocs < 2.3
 
 %description devel
@@ -156,7 +162,7 @@ Summary:	DICOM plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka DICOM dla biblioteki OpenImageIO
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	dcmtk >= 3.6.1
+Requires:	dcmtk >= 3.6.2
 Requires:	squish >= 1.10
 
 %description plugin-dicom
@@ -418,12 +424,15 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 
 %prep
 %setup -q
+%patch -P1 -p1
 %patch -P2 -p1
 %patch -P3 -p1
 
 %build
+# .pc file creation expects relative CMAKE_INSTALL_LIBDIR
 %cmake -B build \
 	-DCMAKE_CXX_STANDARD=17 \
+	-DCMAKE_INSTALL_LIBDIR=%{_lib} \
 	-DCMAKE_INSTALL_MANDIR=%{_mandir}/man1 \
 	-DEMBEDPLUGINS=OFF \
 	-DBUILD_TESTING=OFF \
@@ -434,6 +443,9 @@ Wiązanie Pythona do biblioteki OpenImageIO.
 	%{!?with_ocio:-DUSE_OCIO=OFF} \
 	%{!?with_opencv:-DUSE_OPENCV=OFF} \
 	%{?with_qt5:-DUSE_QT6=OFF} \
+%ifarch %{x8664} x32
+	%{!?with_sse42:-DUSE_SIMD=sse2} \
+%endif
 	%{!?with_tbb:-DUSE_TBB=OFF}
 
 %{__make} -C build
@@ -470,9 +482,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/maketx
 %attr(755,root,root) %{_bindir}/oiiotool
 %{_libdir}/libOpenImageIO.so.*.*.*
-%ghost %{_libdir}/libOpenImageIO.so.3.1
+%ghost %{_libdir}/libOpenImageIO.so.3.2
 %{_libdir}/libOpenImageIO_Util.so.*.*.*
-%ghost %{_libdir}/libOpenImageIO_Util.so.3.1
+%ghost %{_libdir}/libOpenImageIO_Util.so.3.2
 %{_libdir}/bmp.imageio.so
 %{_libdir}/fits.imageio.so
 %{_libdir}/hdr.imageio.so
@@ -586,7 +598,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n python3-OpenImageIO
 %defattr(644,root,root,755)
 %dir %{py3_sitedir}/OpenImageIO
-%attr(755,root,root) %{py3_sitedir}/OpenImageIO/OpenImageIO*.so
+%{py3_sitedir}/OpenImageIO/OpenImageIO.cpython-*.so
 %{py3_sitedir}/OpenImageIO/__init__.py
 %{py3_sitedir}/OpenImageIO/__init__.pyi
 %{py3_sitedir}/OpenImageIO/py.typed

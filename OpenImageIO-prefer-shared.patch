@@ -1,0 +1,32 @@
+--- OpenImageIO-3.2.1.2/src/cmake/externalpackages.cmake.orig	2026-10-15 03:17:40.000000000 +0200
++++ OpenImageIO-3.2.1.2/src/cmake/externalpackages.cmake	2026-10-17 07:40:03.062232044 +0200
+@@ -104,13 +104,13 @@ checked_find_package (libuhdr
+ if (NOT TARGET Deflate::Deflate)
+     checked_find_package (libdeflate
+                           VERSION_MIN 1.18)
+-    alias_library_if_not_exists (Deflate::Deflate libdeflate::libdeflate_static)
+     alias_library_if_not_exists (Deflate::Deflate libdeflate::libdeflate_shared)
++    alias_library_if_not_exists (Deflate::Deflate libdeflate::libdeflate_static)
+ endif ()
+ if (NOT TARGET ZSTD::ZSTD)
+     checked_find_package (zstd VERSION_MIN 1.4)
+-    alias_library_if_not_exists (ZSTD::ZSTD zstd::libzstd_static)
+     alias_library_if_not_exists (ZSTD::ZSTD zstd::libzstd_shared)
++    alias_library_if_not_exists (ZSTD::ZSTD zstd::libzstd_static)
+ endif ()
+ 
+ # WebP must be found before TIFF, so that an auto-built libtiff can use it.
+@@ -162,10 +162,10 @@ endif ()
+ # we will continue building, but the related functionality will be disabled.
+ 
+ checked_find_package (PNG VERSION_MIN 1.6.0)
+-if (TARGET PNG::png_static)
+-    set (PNG_TARGET PNG::png_static)
+-elseif (TARGET PNG::PNG)
++if (TARGET PNG::PNG)
+     set (PNG_TARGET PNG::PNG)
++elseif (TARGET PNG::png_static)
++    set (PNG_TARGET PNG::png_static)
+ endif ()
+ 
+ checked_find_package (Freetype
