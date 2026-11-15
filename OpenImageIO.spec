@@ -34,13 +34,13 @@
 Summary:	Library for reading and writing images
 Summary(pl.UTF-8):	Biblioteka do odczytu i zapisu obrazów
 Name:		OpenImageIO
-Version:	3.2.1.2
-Release:	6
+Version:	3.2.2.0
+Release:	1
 License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/AcademySoftwareFoundation/OpenImageIO/releases
 Source0:	https://github.com/AcademySoftwareFoundation/OpenImageIO/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	66404916221c772550b758f4328fca31
+# Source0-md5:	1609bba58a1ba15c11032b29ac23de46
 Patch1:		%{name}-prefer-shared.patch
 Patch2:		%{name}-system-libcineon.patch
 Patch3:		no-clang-format.patch
@@ -66,7 +66,6 @@ BuildRequires:	dcmtk-devel >= 3.6.2
 BuildRequires:	ffmpeg-devel >= 4.0
 BuildRequires:	freetype-devel >= 1:2.10.0
 BuildRequires:	giflib-devel >= 5.0
-BuildRequires:	glew-devel >= 1.5.1
 BuildRequires:	hdf5-devel
 BuildRequires:	jasper-devel
 BuildRequires:	libcineon-devel
@@ -89,16 +88,17 @@ BuildRequires:	openjph-devel >= 0.21.2
 BuildRequires:	pkgconfig
 BuildRequires:	ptex-devel >= 2.1
 BuildRequires:	pugixml-devel >= 1.8
-BuildRequires:	python3-devel >= 1:3.7
-BuildRequires:	python3-nanobind
-BuildRequires:	robin-map-devel >= 1.2.0
+BuildRequires:	python3-devel >= 1:3.9
+BuildRequires:	python3-nanobind >= 2.8.0
+BuildRequires:	robin-map-devel >= 1.3.0
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	squish-devel >= 1.10
 %{?with_tbb:BuildRequires:	tbb-devel >= 2018}
 BuildRequires:	txt2man
 BuildRequires:	zlib-devel
-Requires:	OpenEXR >= 3.1.10
+BuildRequires:	zstd-devel >= 1.4
+Requires:	OpenEXR%{?_isa} >= 3.1.10
 %ifarch %{x8664} x32
 Requires:	cpuinfo(sse2)
 %if %{with sse42}
@@ -134,9 +134,9 @@ RMan Zfile, Softimage PIC, DDS, SGI, PNM/PPM/PGM/PBM, OpenVDB, WebP.
 Summary:	Header files for OpenImageIO library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki OpenImageIO
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	libfmt-devel >= 9.0
-Requires:	libstdc++-devel >= 6:9.3
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	libfmt-devel%{?_isa} >= 9.0
+Requires:	libstdc++-devel%{?_isa} >= 6:9.3
 Obsoletes:	OpenImageIO-apidocs < 2.3
 
 %description devel
@@ -149,7 +149,7 @@ Pliki nagłówkowe biblioteki OpenImageIO.
 Summary:	Cineon plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka Cineon dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 
 %description plugin-cineon
 OpenImageIO plugin to read Cineon files.
@@ -161,9 +161,8 @@ Wtyczka biblioteki OpenImageIO czytająca pliki Cineon.
 Summary:	DICOM plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka DICOM dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	dcmtk >= 3.6.2
-Requires:	squish >= 1.10
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	dcmtk%{?_isa} >= 3.6.2
 
 %description plugin-dicom
 OpenImageIO plugin to read DICOM files.
@@ -175,8 +174,8 @@ Wtyczka biblioteki OpenImageIO czytająca pliki DICOM.
 Summary:	DDS plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka DDS dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	squish >= 1.10
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	squish%{?_isa} >= 1.10
 
 %description plugin-dds
 OpenImageIO plugin to read DDS files.
@@ -188,7 +187,7 @@ Wtyczka biblioteki OpenImageIO czytająca pliki DDS.
 Summary:	DPX plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka DPX dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 
 %description plugin-dpx
 OpenImageIO plugin to read and write DPX files.
@@ -200,8 +199,8 @@ Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki DPX.
 Summary:	FFmpeg plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka FFmpeg dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	ffmpeg-libs >= 4.0
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	ffmpeg-libs%{?_isa} >= 4.0
 
 %description plugin-ffmpeg
 OpenImageIO plugin to read FFmpeg files.
@@ -213,8 +212,8 @@ Wtyczka biblioteki OpenImageIO czytająca pliki FFmpeg.
 Summary:	Gif plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka Gif dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	giflib >= 5.0
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	giflib%{?_isa} >= 5.0
 
 %description plugin-gif
 OpenImageIO plugin to read GIF files.
@@ -226,8 +225,8 @@ Wtyczka biblioteki OpenImageIO czytająca pliki GIF.
 Summary:	HEIF plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka HEIF dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	libheif >= 1.17
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	libheif%{?_isa} >= 1.17
 
 %description plugin-heif
 OpenImageIO plugin to read HEIF files.
@@ -239,7 +238,7 @@ Wtyczka biblioteki OpenImageIO czytająca pliki HEIF.
 Summary:	ICO plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka ICO dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 
 %description plugin-ico
 OpenImageIO plugin to read and write ICO files.
@@ -251,9 +250,9 @@ Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki ICO.
 Summary:	JPEG plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka JPEG dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	libjpeg-turbo >= 2.1
-Requires:	libultrahdr >= 1.3
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	libjpeg-turbo%{?_isa} >= 2.1
+Requires:	libultrahdr%{?_isa} >= 1.3
 
 %description plugin-jpeg
 OpenImageIO plugin to read and write JPEG files (with TIFF/EXIF
@@ -267,7 +266,7 @@ z informacjami TIFF/EXIF).
 Summary:	JPEG2000 plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka JPEG2000 dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 
 %description plugin-jpeg2000
 OpenImageIO plugin to read and write JPEG2000 files.
@@ -279,8 +278,8 @@ Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki JPEG2000.
 Summary:	JPEG XL plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka JPEG XL dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	libjxl >= 0.10.1
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	libjxl%{?_isa} >= 0.10.1
 
 %description plugin-jpegxl
 OpenImageIO plugin to read and write JPEG XL files.
@@ -292,8 +291,8 @@ Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki JPEG XL.
 Summary:	OpenEXR plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka OpenEXR dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	OpenEXR >= 3.1.10
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	OpenEXR%{?_isa} >= 3.1.10
 
 %description plugin-openexr
 OpenImageIO plugin to read and write OpenEXR files.
@@ -305,8 +304,8 @@ Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki OpenEXR.
 Summary:	OpenVDB plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka OpenVDB dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	openvdb >= 9.0
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	openvdb%{?_isa} >= 9.0
 
 %description plugin-openvdb
 OpenImageIO plugin to read OpenVDB files.
@@ -318,7 +317,7 @@ Wtyczka biblioteki OpenImageIO czytająca pliki OpenVDB.
 Summary:	PNG plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka PNG dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 
 %description plugin-png
 OpenImageIO plugin to read and write PNG files.
@@ -330,7 +329,7 @@ Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki PNG.
 Summary:	PSD plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka PSD dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 
 %description plugin-psd
 OpenImageIO plugin to read and write PSD files.
@@ -342,8 +341,8 @@ Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki PSD.
 Summary:	Ptex plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka Ptex dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	ptex >= 2
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	ptex%{?_isa} >= 2
 
 %description plugin-ptex
 OpenImageIO plugin to read Ptex files.
@@ -355,8 +354,8 @@ Wtyczka biblioteki OpenImageIO czytająca pliki Ptex.
 Summary:	RAW plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka RAW dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	libraw >= 0.21.3
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	libraw%{?_isa} >= 0.21.3
 
 %description plugin-raw
 OpenImageIO plugin to readTRAW files.
@@ -368,7 +367,7 @@ Wtyczka biblioteki OpenImageIO czytająca pliki RAW.
 Summary:	WebP plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka WebP dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 
 %description plugin-webp
 OpenImageIO plugin to read and write WebP files.
@@ -380,8 +379,8 @@ Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki WebP.
 Summary:	TIFF plugin for OpenImageIO library
 Summary(pl.UTF-8):	Wtyczka TIFF dla biblioteki OpenImageIO
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	libtiff >= 4.5
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	libtiff%{?_isa} >= 4.5
 
 %description plugin-tiff
 OpenImageIO plugin to read and write TIFF files.
@@ -393,12 +392,13 @@ Wtyczka biblioteki OpenImageIO czytająca i zapisująca pliki TIFF.
 Summary:	Qt/OpenImageIO-based Image Viewer
 Summary(pl.UTF-8):	Przeglądarka obrazków (IV) oparta o Qt i OpenImageIO
 Group:		X11/Applications/Graphics
-Requires:	%{name} = %{version}-%{release}
-Requires:	Qt5Core >= 5.6
-Requires:	Qt5Gui >= 5.6
-Requires:	Qt5OpenGL >= 5.6
-Requires:	Qt5Widgets >= 5.6
-Requires:	glew >= 1.5.1
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+%if %{with qt5}
+Requires:	Qt5Core%{?_isa} >= 5.6
+Requires:	Qt5Gui%{?_isa} >= 5.6
+Requires:	Qt5OpenGL%{?_isa} >= 5.6
+Requires:	Qt5Widgets%{?_isa} >= 5.6
+%endif
 
 %description iv
 IV is an image viewer based on ImageIO plugins; therefore it can read
@@ -413,7 +413,7 @@ istnieje właściwa wtyczka.
 Summary:	Python binding for OpenImageIO library
 Summary(pl.UTF-8):	Wiązanie Pythona do biblioteki OpenImageIO
 Group:		Libraries/Python
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 Obsoletes:	python-OpenImageIO < 2.3.12.0-3
 
 %description -n python3-OpenImageIO
